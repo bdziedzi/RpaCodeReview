@@ -1,0 +1,99 @@
+{
+  "name": "RpaCodeReview",
+  "projectId": "e2d037d1-ff70-49d5-912b-03a67613d866",
+  "description": "Local deterministic UiPath RPA code review process",
+  "main": "Main.xaml",
+  "dependencies": {
+    "UiPath.System.Activities": "[26.6.0]"
+  },
+  "webServices": [],
+  "entitiesStores": [],
+  "schemaVersion": "4.0",
+  "studioVersion": "26.0.196.0",
+  "projectVersion": "1.0.0",
+  "runtimeOptions": {
+    "autoDispose": false,
+    "netFrameworkLazyLoading": false,
+    "isPausable": false,
+    "isAttended": false,
+    "requiresUserInteraction": false,
+    "supportsPersistence": false,
+    "workflowSerialization": "NewtonsoftJson",
+    "excludedLoggedData": [
+      "Private:*",
+      "*password*"
+    ],
+    "executionType": "Workflow",
+    "readyForPiP": false,
+    "startsInPiP": false,
+    "mustRestoreAllDependencies": true,
+    "pipType": "ChildSession"
+  },
+  "designOptions": {
+    "projectProfile": "Developement",
+    "outputType": "Process",
+    "libraryOptions": {
+      "privateWorkflows": []
+    },
+    "processOptions": {
+      "ignoredFiles": []
+    },
+    "fileInfoCollection": [],
+    "saveToCloud": false
+  },
+  "expressionLanguage": "CSharp",
+  "entryPoints": [
+    {
+      "filePath": "RpaCodeReviewWorkflow.cs",
+      "uniqueId": "b2d3e7b5-5c15-4cf6-9d2d-0dbf9aa70b2a",
+      "input": [
+        {
+          "name": "ProjectPath",
+          "type": "System.String",
+          "required": true,
+          "hasDefault": false
+        },
+        {
+          "name": "RulesPath",
+          "type": "System.String",
+          "required": false,
+          "hasDefault": false
+        },
+        {
+          "name": "OutputReportPath",
+          "type": "System.String",
+          "required": false,
+          "hasDefault": false
+        },
+        {
+          "name": "IncludeHiddenFiles",
+          "type": "System.Boolean",
+          "required": false,
+          "hasDefault": false
+        },
+        {
+          "name": "FailOnMissingRequiredArtifact",
+          "type": "System.Boolean",
+          "required": false,
+          "hasDefault": false
+        },
+        {
+          "name": "RuleFilter",
+          "type": "System.String",
+          "required": false,
+          "hasDefault": false
+        }
+      ],
+      "output": [
+        {
+          "name": "Output",
+          "type": "System.String"
+        }
+      ]
+    }
+  ],
+  "isTemplate": false,
+  "templateProjectData": {},
+  "publishData": {},
+  "targetFramework": "Windows"
+}
