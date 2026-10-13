@@ -24,6 +24,10 @@ namespace RpaCodeReview
         public bool required { get; set; }
         public string guidance { get; set; } = "";
         public string manualReason { get; set; } = "";
+        public string implementationStatus { get; set; } = "";
+        public string evidenceScope { get; set; } = "";
+        public string limitations { get; set; } = "";
+        public string recommendedAction { get; set; } = "";
     }
 
     public sealed class ProjectFileEvidence

@@ -2,63 +2,2821 @@
   "schemaVersion": "1.0",
   "document": "Wytyczne realizacyjne RPA 4.3",
   "analysisMode": "LocalDeterministic",
-  "statuses": ["Pass", "Fail", "Warning"],
+  "statuses": [
+    "Pass",
+    "Fail",
+    "Warning"
+  ],
   "rules": [
-    {"id":"1.1.1","category":"Naming","title":"Artefakty mają standardowe nazwy","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["^[A-Za-z][A-Za-z0-9_\\-]*\\.(xaml|cs)$"],"required":false,"guidance":"Nazwy artefaktów powinny być czytelne i zgodne ze standardem zespołu."},
-    {"id":"1.1.2","category":"Naming","title":"Zmienne mają czytelne nazwy","severity":"Medium","checkType":"RegexAllMatches","filePatterns":["*.xaml","*.cs"],"patterns":["(?:Name=|\\bvar\\s+)([A-Za-z_][A-Za-z0-9_]*)"],"required":false,"guidance":"Nazwy zmiennych powinny opisywać zawartość i nie używać skrótów niezrozumiałych poza domeną."},
-    {"id":"1.1.3","category":"Naming","title":"Argumenty mają prefiks kierunku","severity":"Medium","checkType":"ArgumentNaming","filePatterns":["*.xaml","*.cs"],"patterns":["in_","out_","io_"],"required":false,"guidance":"Argumenty powinny jednoznacznie wskazywać kierunek In/Out/InOut zgodnie ze standardem projektu. Kontrola rozpoznaje deklaracje x:Property, atrybuty this:Workflow.argument oraz parametry Execute(...)."},
-    {"id":"1.1.4","category":"Naming","title":"Czynności mają opisowe DisplayName","severity":"Low","checkType":"RegexAnyFile","filePatterns":["*.xaml"],"patterns":["DisplayName=\\\"[^\\\"]+\\\""],"required":false,"guidance":"Czynności powinny mieć opisowe nazwy w designerze."},
-    {"id":"1.1.5","category":"Naming","title":"Nazwy assetów są odróżnialne od wartości","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Nie można potwierdzić statycznie konwencji nazw assetów w Orchestratorze."},
-    {"id":"1.1.6","category":"Naming","title":"Nazwy kolejek spełniają standard","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Konwencja i konfiguracja kolejek wymaga porównania z Orchestrator folderem."},
-    {"id":"1.1.7","category":"Naming","title":"Nazwy Storage Bucket spełniają standard","severity":"Low","checkType":"Manual","required":false,"manualReason":"Storage Buckets są zasobem zewnętrznym i nie wynikają jednoznacznie ze źródeł."},
-    {"id":"1.2.1","category":"Structure","title":"Pliki workflowów są w logicznej strukturze","severity":"Medium","checkType":"AnyFile","filePatterns":["*.xaml","*.cs"],"required":true,"guidance":"Workflowy powinny być pogrupowane według odpowiedzialności."},
-    {"id":"1.2.2","category":"Structure","title":"Rozwiązanie jest modularne","severity":"High","checkType":"XmlContains","filePatterns":["*.xaml"],"patterns":["InvokeWorkflowFile|InvokeCode|InvokeMethod"],"required":false,"guidance":"Duże procesy powinny być podzielone na mniejsze workflowy."},
-    {"id":"1.2.3","category":"Structure","title":"Granulacja workflowów jest rozsądna","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Rozsądnej granulacji nie da się wiarygodnie ocenić wyłącznie przez liczbę aktywności."},
-    {"id":"1.2.4","category":"Structure","title":"Workflowy zawierają adnotacje lub opis","severity":"Low","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.md"],"patterns":["Annotation|Comment|Documentation|opis|description"],"required":false,"guidance":"Kluczowe fragmenty powinny mieć opis celu i założeń."},
-    {"id":"1.2.5","category":"Structure","title":"Powtarzalne fragmenty są wydzielone","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Wymaga analizy podobieństwa fragmentów i decyzji architektonicznej."},
-    {"id":"1.2.6","category":"Structure","title":"Wykorzystano wymagany framework","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","project.json"],"patterns":["REFramework|Framework|UiPath.System.Activities"],"required":false,"guidance":"Projekt powinien używać zatwierdzonych frameworków i wzorców."},
-    {"id":"1.2.7","category":"Structure","title":"Zmienne są hermetyzowane, a dane przekazywane argumentami","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["x:Property Name=|Arguments|InArgument|OutArgument|InOutArgument"],"required":false,"guidance":"Należy ograniczać globalny stan i jawnie przekazywać dane między workflowami."},
-    {"id":"1.2.8","category":"Dependencies","title":"Dependencies są zdefiniowane i zgodne z projektem","severity":"High","checkType":"ProjectManifest","required":true,"guidance":"Manifest projektu powinien zawierać wymagane pakiety i wersje."},
-    {"id":"1.2.9","category":"Structure","title":"Pliki pomocnicze są wersjonowalne","severity":"Medium","checkType":"FileExists","filePatterns":["README.md",".gitignore"],"required":false,"guidance":"Repozytorium powinno zawierać instrukcję i poprawną konfigurację plików pomocniczych."},
-    {"id":"1.3.1","category":"Libraries","title":"Biblioteka Common jest używana, gdy jest dostępna","severity":"Medium","checkType":"PackageDependency","patterns":["Common","AUMS_Library"],"required":false,"guidance":"Należy korzystać z zatwierdzonych bibliotek wspólnych zamiast duplikować rozwiązania."},
-    {"id":"1.3.2","category":"Libraries","title":"Dependencies są minimalne i uzasadnione","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Statyczny analizator nie zna celu każdej zależności ani polityki wersji zespołu."},
-    {"id":"1.3.3","category":"Libraries","title":"AUMS_Library użyto przy procesach AUMS","severity":"Medium","checkType":"Manual","required":false,"manualReason":"Wymaga rozpoznania systemu docelowego i dostępności biblioteki."},
-    {"id":"1.3.4","category":"Libraries","title":"Wyjątek CSS jest udokumentowany","severity":"Low","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.md"],"patterns":["CSS|css|wyjątek|exception"],"required":false,"guidance":"Odstępstwa od bibliotek powinny mieć uzasadnienie."},
-    {"id":"2.1","category":"VersionControl","title":"Projekt zawiera metadane wersjonowania","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["project.json","*.md","*.yml","*.yaml"],"patterns":["version|Version|commit|branch|Git"],"required":false,"guidance":"Wersja i historia zmian powinny być możliwe do odtworzenia."},
-    {"id":"2.2","category":"VersionControl","title":"Repozytorium Git jest używane poprawnie","severity":"High","checkType":"DirectoryExists","filePatterns":[".git"],"required":false,"guidance":"Status repozytorium, branching i uprawnienia wymagają potwierdzenia w Git."},
-    {"id":"2.3","category":"VersionControl","title":"Code Review ma ślad w repozytorium","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Historia Pull Requestów i komentarzy nie jest częścią lokalnych plików projektu."},
-    {"id":"3.1","category":"Transaction","title":"Proces ma model transakcyjny","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["Transaction|GetTransaction|SetTransactionStatus|QueueItem|REFramework"],"required":false,"guidance":"Przetwarzanie danych powinno rozdzielać transakcje i statusy."},
-    {"id":"3.2.1","category":"Input","title":"ProcesVariables.xlsx istnieje, gdy jest wymagany","severity":"Medium","checkType":"FileExists","filePatterns":["ProcessVariables.xlsx"],"required":false,"guidance":"Wejściowe zmienne procesu powinny mieć jednoznaczny kontrakt."},
-    {"id":"3.2.2","category":"Input","title":"WymagalnoscDanych.xaml istnieje, gdy jest wymagany","severity":"Medium","checkType":"FileExists","filePatterns":["WymagalnoscDanych.xaml"],"required":false,"guidance":"Proces powinien walidować kompletność danych przed przetwarzaniem."},
-    {"id":"3.3","category":"Output","title":"Wyjście procesu jest jawnie zdefiniowane","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["OutArgument|out_|Output|Report|Result"],"required":false,"guidance":"Wyniki i statusy powinny być jawnie przekazane lub zapisane."},
-    {"id":"3.4","category":"Arguments","title":"Przekazywanie danych między artefaktami odbywa się argumentami","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["InvokeWorkflowFile|InArgument|OutArgument|workflows\\."],"required":false,"guidance":"Nie należy opierać komunikacji między workflowami na ukrytym stanie."},
-    {"id":"4.1","category":"Quality","title":"Brak jawnych sekretów w źródłach","severity":"Critical","checkType":"RegexNoMatch","filePatterns":["*.xaml","*.cs","*.json","*.config","*.xml","*.md"],"patterns":["password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"],"required":true,"guidance":"Hasła, klucze i sekrety powinny być przechowywane w bezpiecznych zasobach."},
-    {"id":"4.2","category":"Quality","title":"Obsługa błędów jest obecna","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"],"required":true,"guidance":"Błędy powinny być klasyfikowane i obsługiwane bez pustych catchy."},
-    {"id":"4.3","category":"Processing","title":"Artefakt przetwarzania używa REFramework lub zatwierdzonego wzorca","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","project.json"],"patterns":["REFramework|Framework|Process.xaml|TransactionItem"],"required":false,"guidance":"Wymaga potwierdzenia, że framework jest właściwy dla procesu."},
-    {"id":"4.3.screenshot","category":"Processing","title":"Błędy aplikacyjne generują screenshoty","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.json","*.md"],"patterns":["ExceptionScreenshots|Take Screenshot|Screenshot|screenshot"],"required":true,"guidance":"Screenshot powinien umożliwiać diagnozę błędu."},
-    {"id":"4.3.parallel","category":"Processing","title":"Proces wspiera równoległe przetwarzanie, gdy jest to wymagane","severity":"Medium","checkType":"Manual","required":false,"manualReason":"Wymaga oceny modelu obciążenia i konfiguracji Orchestratora."},
-    {"id":"4.4","category":"Reporting","title":"Raport używa Framework_Raport","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","project.json"],"patterns":["Framework_Raport|FrameworkRaport|Report"],"required":false,"guidance":"Raporty powinny korzystać ze standardowego frameworka."},
-    {"id":"4.4.datetime","category":"Reporting","title":"Zakres czasowy raportu jest typu DateTime","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["DateTime|StartDate|EndDate|FromDate|ToDate"],"required":false,"guidance":"Zakres raportu powinien być przekazany jako DateTime."},
-    {"id":"4.5","category":"Configuration","title":"Config.xlsx ma arkusze DEV i PRD","severity":"High","checkType":"Manual","required":true,"manualReason":"Wymaga odczytu arkuszy skoroszytu; sama obecność pliku nie potwierdza nazw arkuszy."},
-    {"id":"4.5.queue","category":"Configuration","title":"Nazwy kolejek nie są parametrami Config","severity":"Medium","checkType":"Manual","required":true,"manualReason":"Wymaga semantycznego rozróżnienia nazw kolejek od pozostałej konfiguracji."},
-    {"id":"4.5.environment","category":"Configuration","title":"Asset Environment jest pobierany z Orchestratora","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.md"],"patterns":["Environment|Enviroment|Get Asset|Orchestrator"],"required":false,"guidance":"Środowisko powinno być określane przez asset zgodnie z wytyczną."},
-    {"id":"4.6","category":"Files","title":"Dane testowe są w Input-data-TST","severity":"Medium","checkType":"DirectoryExists","filePatterns":["Input-data-TST"],"required":false,"guidance":"Dane testowe powinny mieć osobny katalog i lustrzaną strukturę."},
-    {"id":"4.6.temp","category":"Files","title":"Pliki tymczasowe są czyszczone","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["Delete File|DeleteFolder|Directory.Delete|File.Delete|temp|temporary"],"required":true,"guidance":"Czyszczenie powinno być wykonywane przed i po pracy procesu."},
-    {"id":"4.6.storage","category":"Files","title":"Dla dużych danych rozważono Storage Bucket","severity":"Medium","checkType":"Manual","required":false,"manualReason":"Wymaga oceny wolumenu i zasobu biznesowego."},
-    {"id":"4.7","category":"Exceptions","title":"Katalog ExceptionScreenshots jest obecny","severity":"High","checkType":"DirectoryExists","filePatterns":["ExceptionScreenshots"],"required":true,"guidance":"Katalog screenshotów powinien być powiązany z artefaktem."},
-    {"id":"4.7.location","category":"Exceptions","title":"Screenshoty są zapisywane w katalogu artefaktu","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs"],"patterns":["ExceptionScreenshots"],"required":false,"guidance":"Lokalizacja screenshotów powinna być stabilna dla DEV i PRD."},
-    {"id":"4.8","category":"Mail","title":"Wysyłka maili jest uzasadniona i zawiera stopkę automatyczną","severity":"Medium","checkType":"Manual","required":false,"manualReason":"Potrzeba biznesowa oraz odbiorcy wymagają oceny procesu i konfiguracji poczty."},
-    {"id":"4.9","category":"Web","title":"Przeglądarka działa w trybie prywatnym, gdy wymagane","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.json","*.md"],"patterns":["private|incognito|Chrome|Edge|Enterprise"],"required":false,"guidance":"Tryb prywatny i preferowana przeglądarka powinny wynikać z wymagań procesu."},
-    {"id":"4.10","category":"Files","title":"Pliki tymczasowe są czyszczone przed i po procesie","severity":"High","checkType":"Manual","required":true,"manualReason":"Statyczny skan wykrywa operacje czyszczenia, ale nie potwierdza kolejności przed/po."},
-    {"id":"AUMS.1","category":"AUMS","title":"ZamykarkaAUMS jest używana dla AUMS","severity":"High","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.md"],"patterns":["ZamykarkaAUMS|AUMS"],"required":false,"guidance":"AUMS wymaga prawidłowego zamykania okien."},
-    {"id":"AUMS.2","category":"AUMS","title":"Get Text używa text attribute","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.json"],"patterns":["text attribute|TextAttribute|ScrapingMethod|scraping method"],"required":false,"guidance":"Pobieranie tekstu powinno być odporne na stan elementu."},
-    {"id":"AUMS.3","category":"AUMS","title":"Find Children jest używane do danych strukturalnych","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.md"],"patterns":["Find Children|FindChildren"],"required":false,"guidance":"Dane tabelaryczne powinny być pobierane wydajnie."},
-    {"id":"AUMS.4","category":"AUMS","title":"Selektory głównych okien chronią stan aastate","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.json"],"patterns":["aastate|unavailable|invisible"],"required":false,"guidance":"Selektory powinny wykluczać okna niedostępne i niewidoczne."},
-    {"id":"SOD.1","category":"SOD","title":"SOD korzysta z API zgodnie z frameworkiem","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["*.xaml","*.cs","*.json","*.md"],"patterns":["SOD|API_SOD|FrameworkAPI"],"required":false,"guidance":"SOD 5.5 powinien korzystać z zatwierdzonych szablonów API."},
-    {"id":"RPA-TV.1","category":"RPA-TV","title":"README opisuje kolejki i assety","severity":"Medium","checkType":"RegexAnyFile","filePatterns":["README.md","*.md"],"patterns":["queue|kolejk|asset|default|unique"],"required":false,"guidance":"README powinien opisywać konfigurację potrzebną do uruchomienia."},
-    {"id":"RPA-TV.2","category":"RPA-TV","title":"W projekcie są scenariusze sukces/BRE/Appex","severity":"High","checkType":"Manual","required":true,"manualReason":"Wymaga wykonania trzech typów transakcji w trybie Unattended."},
-    {"id":"RPA-TV.3","category":"RPA-TV","title":"BOT można uruchomić jako Unattended","severity":"High","checkType":"Manual","required":true,"manualReason":"Wymaga sprawdzenia konfiguracji robota i folderu Orchestrator."},
-    {"id":"Security.1","category":"Security","title":"Dostępy produkcyjne nie są zapisane w projekcie","severity":"Critical","checkType":"RegexNoMatch","filePatterns":["*.xaml","*.cs","*.json","*.config","*.xml","*.md"],"patterns":["tok\\.robot|prod.*password|production.*password|login.*hasło"],"required":true,"guidance":"Dane produkcyjne nie mogą być częścią repozytorium."},
-    {"id":"Orchestrator.1","category":"Orchestrator","title":"Wymagane assety i kolejki są zlinkowane z folderem","severity":"High","checkType":"Manual","required":true,"manualReason":"Wymaga weryfikacji zasobów i uprawnień w Orchestratorze."}
+    {
+      "id": "1.1.1.1",
+      "category": "Naming",
+      "title": "Artefakty mają jednoznaczne, opisowe nazwy",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "^[A-Za-z][A-Za-z0-9_\\-]*\\.(xaml|cs)$"
+      ],
+      "required": false,
+      "guidance": "Rozbić na format, diakrytykę i opisowość. Zakres automatyczny: Sprawdzany jest format nazwy pliku .xaml/.cs. Ograniczenie: Nie jest oceniane, czy nazwa opisuje funkcję ani czy skróty są zrozumiałe.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Sprawdzany jest format nazwy pliku .xaml/.cs.",
+      "limitations": "Nie jest oceniane, czy nazwa opisuje funkcję ani czy skróty są zrozumiałe.",
+      "recommendedAction": "Rozbić na format, diakrytykę i opisowość."
+    },
+    {
+      "id": "1.1.1.2",
+      "category": "Naming",
+      "title": "Nazwy artefaktów nie zawierają diakrytyki",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "^[A-Za-z][A-Za-z0-9_\\-]*\\.(xaml|cs)$"
+      ],
+      "required": false,
+      "guidance": "Dodać kontrolę nazw ścieżek. Zakres automatyczny: Brak dedykowanej kontroli diakrytyki w nazwach artefaktów. Ograniczenie: Kontrola regex obecności pliku nie sprawdza znaków w nazwie.",
+      "manualReason": "Kontrola regex obecności pliku nie sprawdza znaków w nazwie.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak dedykowanej kontroli diakrytyki w nazwach artefaktów.",
+      "limitations": "Kontrola regex obecności pliku nie sprawdza znaków w nazwie.",
+      "recommendedAction": "Dodać kontrolę nazw ścieżek."
+    },
+    {
+      "id": "1.1.2",
+      "category": "Naming",
+      "title": "Zasady nazewnictwa zmiennych jako grupa",
+      "severity": "Medium",
+      "checkType": "RuleGroup",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "(?:Name=|\\bvar\\s+)([A-Za-z_][A-Za-z0-9_]*)"
+      ],
+      "required": false,
+      "guidance": "Zastąpić grupą 1.1.2.1–1.1.2.5. Zakres automatyczny: Istnieje stara reguła wykrywająca identyfikatory po Name= lub var. Ograniczenie: Nie sprawdza wszystkich podreguł; nie ocenia znaczenia nazwy.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Istnieje stara reguła wykrywająca identyfikatory po Name= lub var.",
+      "limitations": "Nie sprawdza wszystkich podreguł; nie ocenia znaczenia nazwy.",
+      "recommendedAction": "Zastąpić grupą 1.1.2.1–1.1.2.5."
+    },
+    {
+      "id": "1.1.2.1",
+      "category": "Naming",
+      "title": "Dozwolone notacje: PascalCase, camelCase, snake_case",
+      "severity": "Medium",
+      "checkType": "VariableNotation",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Dodać ekstrakcję zmiennych i walidator notacji. Zakres automatyczny: Typ został zaproponowany w głównym Rules.json, ale nie ma kompletnej implementacji w aktywnej konfiguracji i silniku. Ograniczenie: Brak jeszcze walidacji notacji dla każdej zmiennej.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Typ został zaproponowany w głównym Rules.json, ale nie ma kompletnej implementacji w aktywnej konfiguracji i silniku.",
+      "limitations": "Brak jeszcze walidacji notacji dla każdej zmiennej.",
+      "recommendedAction": "Dodać ekstrakcję zmiennych i walidator notacji."
+    },
+    {
+      "id": "1.1.2.2",
+      "category": "Naming",
+      "title": "Unikanie spójnika „i” w nazwach zmiennych",
+      "severity": "Medium",
+      "checkType": "ForbiddenNameToken",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "i"
+      ],
+      "required": true,
+      "guidance": "Dodać tokenizację nazw. Zakres automatyczny: Konfiguracja zawiera propozycję typu kontroli, ale aktywny plik nie jest z nią zsynchronizowany. Ograniczenie: Nie ma rozróżnienia osobnego członu i zwykłej litery w słowie.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Konfiguracja zawiera propozycję typu kontroli, ale aktywny plik nie jest z nią zsynchronizowany.",
+      "limitations": "Nie ma rozróżnienia osobnego członu i zwykłej litery w słowie.",
+      "recommendedAction": "Dodać tokenizację nazw."
+    },
+    {
+      "id": "1.1.2.3",
+      "category": "Naming",
+      "title": "DataTable ma prefiks dt",
+      "severity": "High",
+      "checkType": "TypedVariablePrefix",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "System.Data.DataTable",
+        "DataTable"
+      ],
+      "required": true,
+      "guidance": "Dodać kontrolę typu i nazwy. Zakres automatyczny: Brak działającej kontroli typu zmiennej i prefiksu. Ograniczenie: Nie jest analizowany typ DataTable w XAML/C#.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak działającej kontroli typu zmiennej i prefiksu.",
+      "limitations": "Nie jest analizowany typ DataTable w XAML/C#.",
+      "recommendedAction": "Dodać kontrolę typu i nazwy."
+    },
+    {
+      "id": "1.1.2.4",
+      "category": "Naming",
+      "title": "Skróty są łatwe do skojarzenia",
+      "severity": "Medium",
+      "checkType": "AbbreviationReview",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Pozostawić jako Warning, bez automatycznego Fail. Zakres automatyczny: Można wygenerować Warning dla ręcznej oceny. Ograniczenie: Znaczenie skrótu zależy od skojarzeń i słownika domenowego osoby robiącej review.",
+      "manualReason": "Znaczenie skrótu zależy od skojarzeń i słownika domenowego osoby robiącej review.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wygenerować Warning dla ręcznej oceny.",
+      "limitations": "Znaczenie skrótu zależy od skojarzeń i słownika domenowego osoby robiącej review.",
+      "recommendedAction": "Pozostawić jako Warning, bez automatycznego Fail."
+    },
+    {
+      "id": "1.1.2.5",
+      "category": "Naming",
+      "title": "Zmienne globalne mają prefiks g_ lub global_",
+      "severity": "High",
+      "checkType": "GlobalVariablePrefix",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "g_",
+        "global_"
+      ],
+      "required": true,
+      "guidance": "Dodać analizę global variables i prefiksów. Zakres automatyczny: Brak dedykowanej kontroli scope globalnego i prefiksu. Ograniczenie: Nie jest rozpoznawany scope globalnej zmiennej.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak dedykowanej kontroli scope globalnego i prefiksu.",
+      "limitations": "Nie jest rozpoznawany scope globalnej zmiennej.",
+      "recommendedAction": "Dodać analizę global variables i prefiksów."
+    },
+    {
+      "id": "1.1.3",
+      "category": "Naming",
+      "title": "Argumenty mają prefiksy in_, out_, io_",
+      "severity": "Medium",
+      "checkType": "ArgumentNaming",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "(?:x:Property Name=|Execute\\s*\\([^)]*)(in_|out_|io_|[A-Za-z_][A-Za-z0-9_]*)"
+      ],
+      "required": false,
+      "guidance": "Rozpoznać x:Property, this:Workflow.argument i Execute. Zakres automatyczny: Konfiguracja główna rozpoznaje część wzorców prefiksów. Ograniczenie: Nie ma pełnej obsługi serializacji this:Main.argument; aktywny plik jest niespójny.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Konfiguracja główna rozpoznaje część wzorców prefiksów.",
+      "limitations": "Nie ma pełnej obsługi serializacji this:Main.argument; aktywny plik jest niespójny.",
+      "recommendedAction": "Rozpoznać x:Property, this:Workflow.argument i Execute."
+    },
+    {
+      "id": "1.1.4.1",
+      "category": "Naming",
+      "title": "Activity ma unikalne DisplayName",
+      "severity": "Low",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [
+        "DisplayName=\\\"[^\\\"]+\\\""
+      ],
+      "required": false,
+      "guidance": "Dodać parser XML i duplikaty DisplayName. Zakres automatyczny: Wykrywana jest obecność DisplayName w XAML. Ograniczenie: Nie jest badana unikalność ani pełna mapa nazw.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywana jest obecność DisplayName w XAML.",
+      "limitations": "Nie jest badana unikalność ani pełna mapa nazw.",
+      "recommendedAction": "Dodać parser XML i duplikaty DisplayName."
+    },
+    {
+      "id": "1.1.4.2",
+      "category": "Naming",
+      "title": "Activity name zawiera typ, element/operację i ewentualny krok instrukcji",
+      "severity": "Low",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [
+        "DisplayName=\\\"[^\\\"]+\\\""
+      ],
+      "required": false,
+      "guidance": "Pozostawić jako ręczny review. Zakres automatyczny: Brak analizy semantyki DisplayName. Ograniczenie: Wymaga kontekstu instrukcji procesu.",
+      "manualReason": "Wymaga kontekstu instrukcji procesu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy semantyki DisplayName.",
+      "limitations": "Wymaga kontekstu instrukcji procesu.",
+      "recommendedAction": "Pozostawić jako ręczny review."
+    },
+    {
+      "id": "1.1.4.3",
+      "category": "Naming",
+      "title": "Numeracja activity jest używana rozsądnie",
+      "severity": "Low",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [
+        "DisplayName=\\\"[^\\\"]+\\\""
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak kontroli relacji numeracji do instrukcji. Ograniczenie: Nie da się potwierdzić rozsądnego poziomu szczegółowości statycznie.",
+      "manualReason": "Nie da się potwierdzić rozsądnego poziomu szczegółowości statycznie.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak kontroli relacji numeracji do instrukcji.",
+      "limitations": "Nie da się potwierdzić rozsądnego poziomu szczegółowości statycznie.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.1.5.1",
+      "category": "Naming",
+      "title": "Assety mają kategorie PATH_, CRED_ lub NazwaBOT_",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Silnik nie łączy źródeł z assetami Orchestratora. Ograniczenie: Wymaga Orchestratora i analizy nazw assetów.",
+      "manualReason": "Wymaga Orchestratora i analizy nazw assetów.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Silnik nie łączy źródeł z assetami Orchestratora.",
+      "limitations": "Wymaga Orchestratora i analizy nazw assetów.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.1.5.2",
+      "category": "Naming",
+      "title": "Nazwy assetów są wskazane w kodzie",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Dodać parser wywołań assetów oraz osobny Warning dla brakującego kontekstu. Zakres automatyczny: Można wyszukiwać teksty typu asset/Environment/Orchestrator. Ograniczenie: Nie jest potwierdzana zgodność z rzeczywistym assetem.",
+      "manualReason": "Nie jest potwierdzana zgodność z rzeczywistym assetem.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wyszukiwać teksty typu asset/Environment/Orchestrator.",
+      "limitations": "Nie jest potwierdzana zgodność z rzeczywistym assetem.",
+      "recommendedAction": "Dodać parser wywołań assetów oraz osobny Warning dla brakującego kontekstu."
+    },
+    {
+      "id": "1.1.5.3",
+      "category": "Naming",
+      "title": "Nazwy assetów nie zawierają polskich znaków",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak źródła nazw assetów. Ograniczenie: Kontrola źródeł nie potwierdza nazw zasobów zewnętrznych.",
+      "manualReason": "Kontrola źródeł nie potwierdza nazw zasobów zewnętrznych.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak źródła nazw assetów.",
+      "limitations": "Kontrola źródeł nie potwierdza nazw zasobów zewnętrznych.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.1.6.1",
+      "category": "Naming",
+      "title": "Rdzeń nazwy kolejki jest aliasem BOT-a",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak porównania z aliasem BOT-a. Ograniczenie: Wymaga Orchestratora i kontekstu procesu.",
+      "manualReason": "Wymaga Orchestratora i kontekstu procesu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak porównania z aliasem BOT-a.",
+      "limitations": "Wymaga Orchestratora i kontekstu procesu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.1.6.2",
+      "category": "Naming",
+      "title": "Nazwy kolejek dla różnych modeli rozliczeń spełniają standard",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak modelu oszczędności i beneficjentów. Ograniczenie: Nie da się ocenić z samych źródeł.",
+      "manualReason": "Nie da się ocenić z samych źródeł.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak modelu oszczędności i beneficjentów.",
+      "limitations": "Nie da się ocenić z samych źródeł.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.1.6.3",
+      "category": "Naming",
+      "title": "Kolejki pomocnicze są oznaczane @ zgodnie ze standardem",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Dodać kontrolę tekstową + Warning kontekstowy. Zakres automatyczny: Można znaleźć znak @ w źródłach. Ograniczenie: Nie jest rozpoznawana rola kolejki ani wpływ na oszczędności.",
+      "manualReason": "Nie jest rozpoznawana rola kolejki ani wpływ na oszczędności.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można znaleźć znak @ w źródłach.",
+      "limitations": "Nie jest rozpoznawana rola kolejki ani wpływ na oszczędności.",
+      "recommendedAction": "Dodać kontrolę tekstową + Warning kontekstowy."
+    },
+    {
+      "id": "1.1.6.4",
+      "category": "Naming",
+      "title": "Nazwy kolejek są bezpośrednio w activity, nie w Config",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak semantycznego porównania activity i Config.xlsx. Ograniczenie: Wymaga analizy workflowów i skoroszytu.",
+      "manualReason": "Wymaga analizy workflowów i skoroszytu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak semantycznego porównania activity i Config.xlsx.",
+      "limitations": "Wymaga analizy workflowów i skoroszytu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.1.7",
+      "category": "Naming",
+      "title": "Storage Bucket ma nazwę BOT-a i wyróżnik",
+      "severity": "Low",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak dostępu do Storage Buckets. Ograniczenie: Wymaga Orchestratora.",
+      "manualReason": "Wymaga Orchestratora.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak dostępu do Storage Buckets.",
+      "limitations": "Wymaga Orchestratora.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.1.1",
+      "category": "Structure",
+      "title": "Pliki XAML opisują główną funkcję workflow",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Dodać reguły nazwy względem zawartości. Zakres automatyczny: Wykrywana jest obecność plików .xaml/.cs. Ograniczenie: Nie oceniana jest opisowość nazwy.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywana jest obecność plików .xaml/.cs.",
+      "limitations": "Nie oceniana jest opisowość nazwy.",
+      "recommendedAction": "Dodać reguły nazwy względem zawartości."
+    },
+    {
+      "id": "1.2.1.2",
+      "category": "Structure",
+      "title": "Main.xaml jest centralnym punktem wejścia",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Sprawdzać project.json/main oraz odwołania. Zakres automatyczny: Istnienie Main.xaml jest widoczne w inwentarzu. Ograniczenie: Nie jest sprawdzane, czy Main jest faktycznym entry pointem i koordynuje proces.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Istnienie Main.xaml jest widoczne w inwentarzu.",
+      "limitations": "Nie jest sprawdzane, czy Main jest faktycznym entry pointem i koordynuje proces.",
+      "recommendedAction": "Sprawdzać project.json/main oraz odwołania."
+    },
+    {
+      "id": "1.2.1.3",
+      "category": "Structure",
+      "title": "Brak diakrytyki i niezrozumiałych skrótów w nazwach plików",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Rozbić format i ocenę skrótów. Zakres automatyczny: Brak pełnej kontroli jakości nazw. Ograniczenie: Skróty wymagają kontekstu.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak pełnej kontroli jakości nazw.",
+      "limitations": "Skróty wymagają kontekstu.",
+      "recommendedAction": "Rozbić format i ocenę skrótów."
+    },
+    {
+      "id": "1.2.1.4",
+      "category": "Structure",
+      "title": "Workflowy są rozdzielone według systemów",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy domenowej nazw katalogów i systemów. Ograniczenie: Wymaga znajomości systemów używanych w procesie.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy domenowej nazw katalogów i systemów.",
+      "limitations": "Wymaga znajomości systemów używanych w procesie.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.2.1",
+      "category": "Structure",
+      "title": "Każdy workflow ma single responsibility",
+      "severity": "High",
+      "checkType": "XmlContains",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [
+        "InvokeWorkflowFile|InvokeCode|InvokeMethod"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak grafu odpowiedzialności workflowu. Ograniczenie: Wymaga oceny architektonicznej.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak grafu odpowiedzialności workflowu.",
+      "limitations": "Wymaga oceny architektonicznej.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.2.2",
+      "category": "Structure",
+      "title": "Podział rośnie wraz ze złożonością",
+      "severity": "High",
+      "checkType": "XmlContains",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [
+        "InvokeWorkflowFile|InvokeCode|InvokeMethod"
+      ],
+      "required": false,
+      "guidance": "Warning/manual. Zakres automatyczny: Można policzyć aktywności, ale silnik nie ocenia zależności złożoności. Ograniczenie: Liczba aktywności nie dowodzi poprawnej modularności.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można policzyć aktywności, ale silnik nie ocenia zależności złożoności.",
+      "limitations": "Liczba aktywności nie dowodzi poprawnej modularności.",
+      "recommendedAction": "Warning/manual."
+    },
+    {
+      "id": "1.2.2.3",
+      "category": "Structure",
+      "title": "Modularność wspiera analizę, refaktoryzację, testy i reuse",
+      "severity": "High",
+      "checkType": "XmlContains",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [
+        "InvokeWorkflowFile|InvokeCode|InvokeMethod"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak kontroli jakości architektury. Ograniczenie: Wymaga review człowieka.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak kontroli jakości architektury.",
+      "limitations": "Wymaga review człowieka.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.3.1",
+      "category": "Structure",
+      "title": "Workflow ma rekomendowane 10–50 activities",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Dodać parser XML z licznikiem. Zakres automatyczny: Silnik nie liczy aktywności per workflow w sposób kontrolowany. Ograniczenie: Zakres zależy od typu activity.",
+      "manualReason": "Zakres zależy od typu activity.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Silnik nie liczy aktywności per workflow w sposób kontrolowany.",
+      "limitations": "Zakres zależy od typu activity.",
+      "recommendedAction": "Dodać parser XML z licznikiem."
+    },
+    {
+      "id": "1.2.3.2",
+      "category": "Structure",
+      "title": "Workflow dzieli się przy trudnej logice/reuse/wielu systemach",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy złożoności i systemów. Ograniczenie: Wymaga oceny architektonicznej.",
+      "manualReason": "Wymaga oceny architektonicznej.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy złożoności i systemów.",
+      "limitations": "Wymaga oceny architektonicznej.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.4",
+      "category": "Structure",
+      "title": "Workflow ma adnotacje i opis celu",
+      "severity": "Low",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.md"
+      ],
+      "patterns": [
+        "Annotation|Comment|Documentation|opis|description"
+      ],
+      "required": false,
+      "guidance": "Parser XAML annotations + Warning jakościowy. Zakres automatyczny: Wykrywane są słowa Annotation/Comment/Documentation/opis. Ograniczenie: Nie jest sprawdzana kompletność i jakość opisu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są słowa Annotation/Comment/Documentation/opis.",
+      "limitations": "Nie jest sprawdzana kompletność i jakość opisu.",
+      "recommendedAction": "Parser XAML annotations + Warning jakościowy."
+    },
+    {
+      "id": "1.2.5.1",
+      "category": "Structure",
+      "title": "Powtarzalne operacje są w osobnych workflowach/Common",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak detekcji podobieństwa fragmentów. Ograniczenie: Wymaga analizy duplikacji i biblioteki.",
+      "manualReason": "Wymaga analizy duplikacji i biblioteki.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak detekcji podobieństwa fragmentów.",
+      "limitations": "Wymaga analizy duplikacji i biblioteki.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.5.2",
+      "category": "Structure",
+      "title": "Komponenty wielokrotnego użycia trafiają do biblioteki",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny potencjału reuse. Ograniczenie: Wymaga decyzji architektonicznej.",
+      "manualReason": "Wymaga decyzji architektonicznej.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny potencjału reuse.",
+      "limitations": "Wymaga decyzji architektonicznej.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.6.1",
+      "category": "Structure",
+      "title": "Framework pobrano z aktualnego repozytorium Git",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak historii/remote Git. Ograniczenie: Wymaga repozytorium.",
+      "manualReason": "Wymaga repozytorium.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak historii/remote Git.",
+      "limitations": "Wymaga repozytorium.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.6.2",
+      "category": "Structure",
+      "title": "Frameworky obowiązujące są użyte zgodnie z artefaktem",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Rozbić per typ artefaktu. Zakres automatyczny: Można wykryć tekst Framework/REFramework/Framework_Raport. Ograniczenie: Nie jest potwierdzona zgodność typu artefaktu i wersji.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć tekst Framework/REFramework/Framework_Raport.",
+      "limitations": "Nie jest potwierdzona zgodność typu artefaktu i wersji.",
+      "recommendedAction": "Rozbić per typ artefaktu."
+    },
+    {
+      "id": "1.2.6.3",
+      "category": "Structure",
+      "title": "Framework niestandardowy ma zgodę architekta",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak formalnej zgody w kodzie. Ograniczenie: Wymaga dokumentu/issue/akceptacji.",
+      "manualReason": "Wymaga dokumentu/issue/akceptacji.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak formalnej zgody w kodzie.",
+      "limitations": "Wymaga dokumentu/issue/akceptacji.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.6.4",
+      "category": "Structure",
+      "title": "project.json ma poprawną nazwę i opis systemów",
+      "severity": "High",
+      "checkType": "ProjectManifest",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Dodać kontrolę pól name/description. Zakres automatyczny: Manifest jest sprawdzany pod kątem sekcji, nie semantycznego opisu. Ograniczenie: Nie jest sprawdzany opis systemów i nazwa artefaktu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Manifest jest sprawdzany pod kątem sekcji, nie semantycznego opisu.",
+      "limitations": "Nie jest sprawdzany opis systemów i nazwa artefaktu.",
+      "recommendedAction": "Dodać kontrolę pól name/description."
+    },
+    {
+      "id": "1.2.6.5",
+      "category": "Structure",
+      "title": "README opisuje funkcjonalność artefaktu",
+      "severity": "High",
+      "checkType": "FileExists",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Manual/partial. Zakres automatyczny: README może być wykryty, a słowa opisowe znalezione. Ograniczenie: Nie jest oceniana kompletność instrukcji.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "README może być wykryty, a słowa opisowe znalezione.",
+      "limitations": "Nie jest oceniana kompletność instrukcji.",
+      "recommendedAction": "Manual/partial."
+    },
+    {
+      "id": "1.2.6.6",
+      "category": "Structure",
+      "title": "ObslugaCMD jest użyta, gdy obligatoryjna",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak dedykowanej kontroli komponentu. Ograniczenie: Wymaga oceny, czy proces potrzebuje tej funkcji.",
+      "manualReason": "Wymaga oceny, czy proces potrzebuje tej funkcji.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak dedykowanej kontroli komponentu.",
+      "limitations": "Wymaga oceny, czy proces potrzebuje tej funkcji.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.6.7",
+      "category": "Structure",
+      "title": "Flowchart zwiększa przejrzystość, gdy powinien być użyty",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|UiPath.System.Activities"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny adekwatności typu workflowu. Ograniczenie: Wymaga architekta.",
+      "manualReason": "Wymaga architekta.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny adekwatności typu workflowu.",
+      "limitations": "Wymaga architekta.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.7.1",
+      "category": "Structure",
+      "title": "Zmienne są hermetyzowane",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "x:Property Name=|Arguments|InArgument|OutArgument|InOutArgument"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Można znaleźć deklaracje, ale nie ocenić scope użycia. Ograniczenie: Wymaga grafu zakresów i użyć.",
+      "manualReason": "Wymaga grafu zakresów i użyć.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Można znaleźć deklaracje, ale nie ocenić scope użycia.",
+      "limitations": "Wymaga grafu zakresów i użyć.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.7.2",
+      "category": "Structure",
+      "title": "Maksymalnie 20 argumentów w workflow",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "x:Property Name=|Arguments|InArgument|OutArgument|InOutArgument"
+      ],
+      "required": false,
+      "guidance": "Dodać parser argumentów. Zakres automatyczny: Można znaleźć x:Property/Execute, ale brak pewnego licznika per workflow. Ograniczenie: Nie wszystkie serializacje są rozpoznawane.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można znaleźć x:Property/Execute, ale brak pewnego licznika per workflow.",
+      "limitations": "Nie wszystkie serializacje są rozpoznawane.",
+      "recommendedAction": "Dodać parser argumentów."
+    },
+    {
+      "id": "1.2.7.3",
+      "category": "Structure",
+      "title": "Preferowane są kolekcje zamiast wielu argumentów",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "x:Property Name=|Arguments|InArgument|OutArgument|InOutArgument"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny intencji projektowej. Ograniczenie: Wymaga kontekstu.",
+      "manualReason": "Wymaga kontekstu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny intencji projektowej.",
+      "limitations": "Wymaga kontekstu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.7.4",
+      "category": "Structure",
+      "title": "Globalne zmienne mają g_/global_ i są świadome",
+      "severity": "High",
+      "checkType": "RegexAnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "x:Property Name=|Arguments|InArgument|OutArgument|InOutArgument"
+      ],
+      "required": false,
+      "guidance": "Partial + manual. Zakres automatyczny: Możliwe jest sprawdzanie prefiksu po wykryciu scope. Ograniczenie: Obecnie brak kompletnego rozpoznania global scope i uzasadnienia.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Możliwe jest sprawdzanie prefiksu po wykryciu scope.",
+      "limitations": "Obecnie brak kompletnego rozpoznania global scope i uzasadnienia.",
+      "recommendedAction": "Partial + manual."
+    },
+    {
+      "id": "1.2.8.1",
+      "category": "Dependencies",
+      "title": "Dependencies są aktualne i stabilne",
+      "severity": "High",
+      "checkType": "ProjectManifest",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Wymaga feedu/polityki wersji. Zakres automatyczny: Manifest i obecność dependencies są odczytywane. Ograniczenie: Brak porównania z aktualną stabilną wersją i Common.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Manifest i obecność dependencies są odczytywane.",
+      "limitations": "Brak porównania z aktualną stabilną wersją i Common.",
+      "recommendedAction": "Wymaga feedu/polityki wersji."
+    },
+    {
+      "id": "1.2.8.2",
+      "category": "Dependencies",
+      "title": "Dependencies są kompatybilne z Common/CSS",
+      "severity": "High",
+      "checkType": "ProjectManifest",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy kompatybilności wersji. Ograniczenie: Wymaga repozytorium bibliotek i wiedzy o CSS.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy kompatybilności wersji.",
+      "limitations": "Wymaga repozytorium bibliotek i wiedzy o CSS.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.2.9.1",
+      "category": "Structure",
+      "title": "Istnieje .gitignore.txt z wykluczeniem screenshots",
+      "severity": "Medium",
+      "checkType": "FileExists",
+      "filePatterns": [
+        "README.md",
+        ".gitignore"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Dodać dokładny check. Zakres automatyczny: Można sprawdzić plik i tekst screenshots. Ograniczenie: Aktywny katalog kontroli szuka README/.gitignore, nie dokładnego .gitignore.txt.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można sprawdzić plik i tekst screenshots.",
+      "limitations": "Aktywny katalog kontroli szuka README/.gitignore, nie dokładnego .gitignore.txt.",
+      "recommendedAction": "Dodać dokładny check."
+    },
+    {
+      "id": "1.2.9.2",
+      "category": "Structure",
+      "title": "Repozytorium nie zawiera danych testowych/produkcyjnych",
+      "severity": "Medium",
+      "checkType": "FileExists",
+      "filePatterns": [
+        "README.md",
+        ".gitignore"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Rozszerzyć inventory i manual review. Zakres automatyczny: Inwentarz widzi tekstowe pliki i może wykrywać niektóre wzorce. Ograniczenie: Nie wykrywa wszystkich danych binarnych ani wrażliwości treści.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Inwentarz widzi tekstowe pliki i może wykrywać niektóre wzorce.",
+      "limitations": "Nie wykrywa wszystkich danych binarnych ani wrażliwości treści.",
+      "recommendedAction": "Rozszerzyć inventory i manual review."
+    },
+    {
+      "id": "1.3.1.1",
+      "category": "Libraries",
+      "title": "Developer aktywnie wykorzystuje istniejące biblioteki",
+      "severity": "Medium",
+      "checkType": "PackageDependency",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "Common",
+        "AUMS_Library"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak porównania z tenant feedem i biblioteką. Ograniczenie: Wymaga repozytorium bibliotek.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak porównania z tenant feedem i biblioteką.",
+      "limitations": "Wymaga repozytorium bibliotek.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.3.1.2",
+      "category": "Libraries",
+      "title": "Nowe reusable komponenty trafiają do biblioteki",
+      "severity": "Medium",
+      "checkType": "PackageDependency",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "Common",
+        "AUMS_Library"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny potencjału komponentu. Ograniczenie: Wymaga review.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny potencjału komponentu.",
+      "limitations": "Wymaga review.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.3.1.3",
+      "category": "Libraries",
+      "title": "Biblioteki mają jakość, testy, dokumentację i przykłady",
+      "severity": "Medium",
+      "checkType": "PackageDependency",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "Common",
+        "AUMS_Library"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy biblioteki jako osobnego artefaktu. Ograniczenie: Wymaga repozytorium i dokumentacji.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy biblioteki jako osobnego artefaktu.",
+      "limitations": "Wymaga repozytorium i dokumentacji.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.3.2",
+      "category": "Libraries",
+      "title": "Dependencies UiPath są stabilne i co najmniej zgodne z Common",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Wykrywane są zależności w manifest. Ograniczenie: Brak porównania wersji i wpływu środowisk.",
+      "manualReason": "Brak porównania wersji i wpływu środowisk.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są zależności w manifest.",
+      "limitations": "Brak porównania wersji i wpływu środowisk.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "1.3.3",
+      "category": "Libraries",
+      "title": "AUMS_Library jest użyta i rozwijana przy AUMS/BPA",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak rozpoznania systemu i biblioteki. Ograniczenie: Wymaga wiedzy domenowej.",
+      "manualReason": "Wymaga wiedzy domenowej.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak rozpoznania systemu i biblioteki.",
+      "limitations": "Wymaga wiedzy domenowej.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "1.3.4",
+      "category": "Libraries",
+      "title": "Wyjątek CSS ma udokumentowane rozwiązanie",
+      "severity": "Low",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.md"
+      ],
+      "patterns": [
+        "CSS|css|wyjątek|exception"
+      ],
+      "required": false,
+      "guidance": "Dodać reguły wersji + manual. Zakres automatyczny: Wykrywane są słowa CSS/Common_CSS. Ograniczenie: Nie jest oceniana wersja ani poprawność wyjątku.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są słowa CSS/Common_CSS.",
+      "limitations": "Nie jest oceniana wersja ani poprawność wyjątku.",
+      "recommendedAction": "Dodać reguły wersji + manual."
+    },
+    {
+      "id": "2.1.1",
+      "category": "VersionControl",
+      "title": "Wersja ma format Major.Minor.Patch",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "project.json",
+        "*.md",
+        "*.yml",
+        "*.yaml"
+      ],
+      "patterns": [
+        "version|Version|commit|branch|Git"
+      ],
+      "required": false,
+      "guidance": "Dodać parser wersji. Zakres automatyczny: Wykrywane są słowa version/Version i projectVersion w manifest. Ograniczenie: Nie ma walidacji semver.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są słowa version/Version i projectVersion w manifest.",
+      "limitations": "Nie ma walidacji semver.",
+      "recommendedAction": "Dodać parser wersji."
+    },
+    {
+      "id": "2.1.2",
+      "category": "VersionControl",
+      "title": "Wersje <1.0.0 są developerskie/testowe",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [
+        "project.json",
+        "*.md",
+        "*.yml",
+        "*.yaml"
+      ],
+      "patterns": [
+        "version|Version|commit|branch|Git"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny przeznaczenia wersji. Ograniczenie: Wymaga procesu wydawniczego.",
+      "manualReason": "Wymaga procesu wydawniczego.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny przeznaczenia wersji.",
+      "limitations": "Wymaga procesu wydawniczego.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.2.1",
+      "category": "VersionControl",
+      "title": "Aktualny kod jest w zdalnym Git",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        ".git"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Katalog .git jest ignorowany przez skan i brak remote check. Ograniczenie: Wymaga Git remote.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Katalog .git jest ignorowany przez skan i brak remote check.",
+      "limitations": "Wymaga Git remote.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.2.2",
+      "category": "VersionControl",
+      "title": "Commity są wykonywane co najmniej raz dziennie",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        ".git"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak historii commitów. Ograniczenie: Wymaga Git log i czasu.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak historii commitów.",
+      "limitations": "Wymaga Git log i czasu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.2.3",
+      "category": "VersionControl",
+      "title": "Zmiany są na branchu z aktualnego mastera",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        ".git"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak branch graph. Ograniczenie: Wymaga Git.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak branch graph.",
+      "limitations": "Wymaga Git.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.2.4",
+      "category": "VersionControl",
+      "title": "Merge do mastera odbywa się przez Pull Request",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        ".git"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak informacji o PR. Ograniczenie: Wymaga platformy Git.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak informacji o PR.",
+      "limitations": "Wymaga platformy Git.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.2.5",
+      "category": "VersionControl",
+      "title": "Commit ma wymagany format i issue reference",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        ".git"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak commit messages. Ograniczenie: Wymaga Git history.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak commit messages.",
+      "limitations": "Wymaga Git history.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.3.1",
+      "category": "VersionControl",
+      "title": "Code Review jest po testach akceptacyjnych",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak kolejności zdarzeń procesu. Ograniczenie: Wymaga procesu i systemu review.",
+      "manualReason": "Wymaga procesu i systemu review.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak kolejności zdarzeń procesu.",
+      "limitations": "Wymaga procesu i systemu review.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.3.2",
+      "category": "VersionControl",
+      "title": "Artefakt jest funkcjonalny i skonfigurowany",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Silnik nie uruchamia i nie ocenia funkcjonalności badanego BOT-a jako zasady CR. Ograniczenie: Wymaga testów akceptacyjnych.",
+      "manualReason": "Wymaga testów akceptacyjnych.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Silnik nie uruchamia i nie ocenia funkcjonalności badanego BOT-a jako zasady CR.",
+      "limitations": "Wymaga testów akceptacyjnych.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "2.3.3",
+      "category": "VersionControl",
+      "title": "CR skupia się na architekturze, nie zastępuje testów",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Raport może rozdzielać warningi manualne od statycznych. Ograniczenie: Brak kontroli procesu CR.",
+      "manualReason": "Brak kontroli procesu CR.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Raport może rozdzielać warningi manualne od statycznych.",
+      "limitations": "Brak kontroli procesu CR.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "2.3.4",
+      "category": "VersionControl",
+      "title": "Uwagi i sugestie są zgłaszane",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak integracji z komentarzami PR. Ograniczenie: Wymaga platformy code review.",
+      "manualReason": "Wymaga platformy code review.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak integracji z komentarzami PR.",
+      "limitations": "Wymaga platformy code review.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "3.1.1",
+      "category": "Transaction",
+      "title": "Proces używa transakcyjnego modelu Orchestratora",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "Transaction|GetTransaction|SetTransactionStatus|QueueItem|REFramework"
+      ],
+      "required": false,
+      "guidance": "Parser frameworku + manual. Zakres automatyczny: Wyszukiwane są Transaction/QueueItem/REFramework. Ograniczenie: Nie potwierdza poprawnego modelu transakcyjnego.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wyszukiwane są Transaction/QueueItem/REFramework.",
+      "limitations": "Nie potwierdza poprawnego modelu transakcyjnego.",
+      "recommendedAction": "Parser frameworku + manual."
+    },
+    {
+      "id": "3.2.1",
+      "category": "Input",
+      "title": "Dane wejściowe są walidowane przed kolejką",
+      "severity": "Medium",
+      "checkType": "FileExists",
+      "filePatterns": [
+        "ProcessVariables.xlsx"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Rozbić na artefakt, kolejność i BRE. Zakres automatyczny: Można wykryć walidację/ProcessVariables/WymagalnoscDanych w źródłach. Ograniczenie: Nie ma kontroli kolejności i kompletności.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć walidację/ProcessVariables/WymagalnoscDanych w źródłach.",
+      "limitations": "Nie ma kontroli kolejności i kompletności.",
+      "recommendedAction": "Rozbić na artefakt, kolejność i BRE."
+    },
+    {
+      "id": "3.2.2",
+      "category": "Input",
+      "title": "ProcessVariables.xlsx ma mapowanie Specific Content",
+      "severity": "Medium",
+      "checkType": "FileExists",
+      "filePatterns": [
+        "WymagalnoscDanych.xaml"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual/Excel-aware. Zakres automatyczny: Silnik nie czyta tabel XLSX. Ograniczenie: Wymaga Excel parsera i semantyki kolumn.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Silnik nie czyta tabel XLSX.",
+      "limitations": "Wymaga Excel parsera i semantyki kolumn.",
+      "recommendedAction": "Manual/Excel-aware."
+    },
+    {
+      "id": "3.2.3",
+      "category": "Input",
+      "title": "Specific Content ma opisowe nazwy sortowane alfabetycznie",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy skoroszytu i kolejności kluczy. Ograniczenie: Wymaga odczytu workbooka.",
+      "manualReason": "Wymaga odczytu workbooka.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy skoroszytu i kolejności kluczy.",
+      "limitations": "Wymaga odczytu workbooka.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "3.2.4",
+      "category": "Input",
+      "title": "WymagalnoscDanych odrzuca dane BRE przed kolejką",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Parser grafu + manual. Zakres automatyczny: Można wykryć nazwę workflow i BusinessRuleException. Ograniczenie: Nie jest potwierdzany przepływ przed Add Queue Item.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć nazwę workflow i BusinessRuleException.",
+      "limitations": "Nie jest potwierdzany przepływ przed Add Queue Item.",
+      "recommendedAction": "Parser grafu + manual."
+    },
+    {
+      "id": "3.3",
+      "category": "Output",
+      "title": "Wyjście procesu zawiera pola z instrukcji",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "OutArgument|out_|Output|Report|Result"
+      ],
+      "required": false,
+      "guidance": "Manual/contract check. Zakres automatyczny: Wykrywane są Output/Report/Result. Ograniczenie: Brak porównania z instrukcją i wymaganymi polami.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są Output/Report/Result.",
+      "limitations": "Brak porównania z instrukcją i wymaganymi polami.",
+      "recommendedAction": "Manual/contract check."
+    },
+    {
+      "id": "3.4.1",
+      "category": "Arguments",
+      "title": "Specific Content jest spójny dla transakcji kolejki",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "InvokeWorkflowFile|InArgument|OutArgument|workflows\\."
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy kolejki i wszystkich ścieżek. Ograniczenie: Wymaga modelu danych runtime.",
+      "manualReason": "Wymaga modelu danych runtime.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy kolejki i wszystkich ścieżek.",
+      "limitations": "Wymaga modelu danych runtime.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "3.4.2",
+      "category": "Arguments",
+      "title": "Brak redundancji i nieużywanych pól",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "InvokeWorkflowFile|InArgument|OutArgument|workflows\\."
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy usage pól. Ograniczenie: Wymaga grafu danych.",
+      "manualReason": "Wymaga grafu danych.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy usage pól.",
+      "limitations": "Wymaga grafu danych.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "3.4.3",
+      "category": "Arguments",
+      "title": "Brak identycznych kluczy Specific Content i OutputDictionary",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "InvokeWorkflowFile|InArgument|OutArgument|workflows\\."
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak parsera słowników. Ograniczenie: Wymaga analizy struktur danych.",
+      "manualReason": "Wymaga analizy struktur danych.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak parsera słowników.",
+      "limitations": "Wymaga analizy struktur danych.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.1.1",
+      "category": "Quality",
+      "title": "Kod odzwierciedla aktualną instrukcję procesu",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak porównania kodu z instrukcją. Ograniczenie: Wymaga dokumentacji procesowej.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak porównania kodu z instrukcją.",
+      "limitations": "Wymaga dokumentacji procesowej.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.1.2",
+      "category": "Quality",
+      "title": "Activity są stabilne i zweryfikowane",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Partial/manual. Zakres automatyczny: Można odczytać dependencies. Ograniczenie: Brak polityki stabilności i historii activity.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można odczytać dependencies.",
+      "limitations": "Brak polityki stabilności i historii activity.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "4.1.3",
+      "category": "Quality",
+      "title": "Brak nieuzasadnionych Delay/DelayBefore/DelayAfter",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Dodać kontrolę obecności + Warning. Zakres automatyczny: Można wykrywać słowa Delay. Ograniczenie: Nie ma oceny zgody architekta i kontekstu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykrywać słowa Delay.",
+      "limitations": "Nie ma oceny zgody architekta i kontekstu.",
+      "recommendedAction": "Dodać kontrolę obecności + Warning."
+    },
+    {
+      "id": "4.1.4",
+      "category": "Quality",
+      "title": "Selektory są minimalne i stabilne; brak trwałego omitt",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak bezpiecznego parsera selectorów i oceny stabilności. Ograniczenie: Wymaga UIA-aware inspection.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak bezpiecznego parsera selectorów i oceny stabilności.",
+      "limitations": "Wymaga UIA-aware inspection.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.1.5",
+      "category": "Quality",
+      "title": "Walidacja danych i błędy krytyczne są obsłużone",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Parser grafu + manual. Zakres automatyczny: Wykrywane są TryCatch/BusinessRuleException. Ograniczenie: Nie jest oceniona kompletność ścieżek.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są TryCatch/BusinessRuleException.",
+      "limitations": "Nie jest oceniona kompletność ścieżek.",
+      "recommendedAction": "Parser grafu + manual."
+    },
+    {
+      "id": "4.1.6",
+      "category": "Quality",
+      "title": "Konwersje liczb i dat są jawne",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Dodać wzorce + manual. Zakres automatyczny: Można wykryć DateTime/Convert/Parse. Ograniczenie: Brak oceny wszystkich konwersji i kultur.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć DateTime/Convert/Parse.",
+      "limitations": "Brak oceny wszystkich konwersji i kultur.",
+      "recommendedAction": "Dodać wzorce + manual."
+    },
+    {
+      "id": "4.1.7",
+      "category": "Quality",
+      "title": "Wielokrotne Assign zastępuje Multiple Assign",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Partial/manual. Zakres automatyczny: Brak licznika i kontekstu Assignów. Ograniczenie: Wymaga parsera XAML i oceny sensowności.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak licznika i kontekstu Assignów.",
+      "limitations": "Wymaga parsera XAML i oceny sensowności.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "4.1.8",
+      "category": "Quality",
+      "title": "Status jest zarezerwowany dla frameworku raportowania",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Dodać parser słowników. Zakres automatyczny: Można wyszukać Status w źródłach. Ograniczenie: Brak rozróżnienia Specific Content/Output i raportu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wyszukać Status w źródłach.",
+      "limitations": "Brak rozróżnienia Specific Content/Output i raportu.",
+      "recommendedAction": "Dodać parser słowników."
+    },
+    {
+      "id": "4.1.9",
+      "category": "Quality",
+      "title": "Znaki specjalne są reprezentowane poprawnie",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy semantyki chr(32)/chr(160). Ograniczenie: Wymaga kontroli wyrażeń i testów danych.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy semantyki chr(32)/chr(160).",
+      "limitations": "Wymaga kontroli wyrażeń i testów danych.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.1.10",
+      "category": "Quality",
+      "title": "Brak długich kaskad warunków",
+      "severity": "Critical",
+      "checkType": "RegexNoMatch",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.config",
+        "*.xml",
+        "*.md"
+      ],
+      "patterns": [
+        "password\\s*[:=]|secret\\s*[:=]|api[_-]?key\\s*[:=]|BEGIN (RSA|OPENSSH) PRIVATE KEY"
+      ],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak licznika i oceny złożoności grafu. Ograniczenie: Wymaga parsera workflow.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak licznika i oceny złożoności grafu.",
+      "limitations": "Wymaga parsera workflow.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.2.1",
+      "category": "Quality",
+      "title": "Artefakt DoKolejki używa aktualnego frameworku",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": true,
+      "guidance": "Manual/version check. Zakres automatyczny: Wykrywane są Framework/QueueItem. Ograniczenie: Nie jest potwierdzony aktualny DoKolejki.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są Framework/QueueItem.",
+      "limitations": "Nie jest potwierdzony aktualny DoKolejki.",
+      "recommendedAction": "Manual/version check."
+    },
+    {
+      "id": "4.2.2",
+      "category": "Quality",
+      "title": "Wymagalność danych jest obowiązkowo zaimplementowana",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": true,
+      "guidance": "Partial. Zakres automatyczny: Można wykryć WymagalnoscDanych/BusinessRuleException. Ograniczenie: Brak dowodu kolejności przed kolejką.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć WymagalnoscDanych/BusinessRuleException.",
+      "limitations": "Brak dowodu kolejności przed kolejką.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.2.3",
+      "category": "Quality",
+      "title": "Logowana jest liczba dodanych pozycji",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": true,
+      "guidance": "Partial. Zakres automatyczny: Można wykryć Log/queue/count. Ograniczenie: Brak semantycznego powiązania licznika z Add Queue Item.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć Log/queue/count.",
+      "limitations": "Brak semantycznego powiązania licznika z Add Queue Item.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.2.4",
+      "category": "Quality",
+      "title": "Liczniki są pominięte przy kolejkowaniu z pliku",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak rozpoznania źródła kolejki. Ograniczenie: Wymaga grafu procesu.",
+      "manualReason": "Wymaga grafu procesu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak rozpoznania źródła kolejki.",
+      "limitations": "Wymaga grafu procesu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.2.5",
+      "category": "Quality",
+      "title": "GUI ma ExceptionScreenshots",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": true,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są nazwy screenshotów i katalog. Ograniczenie: Nie jest potwierdzone powiązanie z każdym Application Exception.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są nazwy screenshotów i katalog.",
+      "limitations": "Nie jest potwierdzone powiązanie z każdym Application Exception.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.2.6",
+      "category": "Quality",
+      "title": "Auto-Retry kolejek jest uzasadniony",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny uzasadnienia i konfiguracji runtime. Ograniczenie: Wymaga Orchestratora i architektury.",
+      "manualReason": "Wymaga Orchestratora i architektury.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny uzasadnienia i konfiguracji runtime.",
+      "limitations": "Wymaga Orchestratora i architektury.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.2.7",
+      "category": "Quality",
+      "title": "Jest ochrona przed duplikacją po unique Reference",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy Reference i kolejki. Ograniczenie: Wymaga modelu danych i Orchestratora.",
+      "manualReason": "Wymaga modelu danych i Orchestratora.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy Reference i kolejki.",
+      "limitations": "Wymaga modelu danych i Orchestratora.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.2.8",
+      "category": "Quality",
+      "title": "Jest selekcja danych wejściowych do dev/test",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs"
+      ],
+      "patterns": [
+        "TryCatch|try\\s*\\{|Catch|catch\\s*\\(|Rethrow|BusinessRuleException"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny opcji selekcji danych. Ograniczenie: Wymaga kontekstu uruchomień.",
+      "manualReason": "Wymaga kontekstu uruchomień.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny opcji selekcji danych.",
+      "limitations": "Wymaga kontekstu uruchomień.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.3.1",
+      "category": "Processing",
+      "title": "Przetwarzanie używa oficjalnego ReFramework",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|Process.xaml|TransactionItem"
+      ],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Wyszukiwany jest REFramework/Framework/Process.xaml. Ograniczenie: Nie jest potwierdzona oficjalność ani kompletność frameworku.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wyszukiwany jest REFramework/Framework/Process.xaml.",
+      "limitations": "Nie jest potwierdzona oficjalność ani kompletność frameworku.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "4.3.2",
+      "category": "Processing",
+      "title": "Błędy aplikacji generują screenshoty",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|Process.xaml|TransactionItem"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są Screenshot/ExceptionScreenshots. Ograniczenie: Brak powiązania każdego błędu z momentem screenshotu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są Screenshot/ExceptionScreenshots.",
+      "limitations": "Brak powiązania każdego błędu z momentem screenshotu.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.3.3",
+      "category": "Processing",
+      "title": "Równoległe przetwarzanie na wielu maszynach",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|Process.xaml|TransactionItem"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak konfiguracji farmy/Orchestratora. Ograniczenie: Wymaga runtime.",
+      "manualReason": "Wymaga runtime.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak konfiguracji farmy/Orchestratora.",
+      "limitations": "Wymaga runtime.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.3.4",
+      "category": "Processing",
+      "title": "Dostępne biblioteki są stosowane",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|Process.xaml|TransactionItem"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak porównania z bibliotekami tenant/repo. Ograniczenie: Wymaga feedu i oceny reuse.",
+      "manualReason": "Wymaga feedu i oceny reuse.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak porównania z bibliotekami tenant/repo.",
+      "limitations": "Wymaga feedu i oceny reuse.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.3.5",
+      "category": "Processing",
+      "title": "Niestandardowy framework ma zgodę architekta",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "REFramework|Framework|Process.xaml|TransactionItem"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak formalnej zgody. Ograniczenie: Wymaga dokumentu/issue.",
+      "manualReason": "Wymaga dokumentu/issue.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak formalnej zgody.",
+      "limitations": "Wymaga dokumentu/issue.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.4.1",
+      "category": "Reporting",
+      "title": "Raport używa Framework_Raport",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "Framework_Raport|FrameworkRaport|Report"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są Framework_Raport/Report. Ograniczenie: Nie jest potwierdzona faktyczna implementacja frameworku.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są Framework_Raport/Report.",
+      "limitations": "Nie jest potwierdzona faktyczna implementacja frameworku.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.4.2",
+      "category": "Reporting",
+      "title": "Zakres raportu jest argumentem DateTime",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "Framework_Raport|FrameworkRaport|Report"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są DateTime/StartDate/EndDate. Ograniczenie: Brak kontroli sygnatury raportu i użycia argumentu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są DateTime/StartDate/EndDate.",
+      "limitations": "Brak kontroli sygnatury raportu i użycia argumentu.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.4.3",
+      "category": "Reporting",
+      "title": "Raport jest uproszczony i zgodny z szablonem",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "Framework_Raport|FrameworkRaport|Report"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak porównania do standardowego template. Ograniczenie: Wymaga oceny wizualnej i funkcjonalnej.",
+      "manualReason": "Wymaga oceny wizualnej i funkcjonalnej.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak porównania do standardowego template.",
+      "limitations": "Wymaga oceny wizualnej i funkcjonalnej.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.4.4",
+      "category": "Reporting",
+      "title": "Projekt uwzględnia wydajność",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "Framework_Raport|FrameworkRaport|Report"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak profilowania i analizy wydajności. Ograniczenie: Wymaga danych runtime.",
+      "manualReason": "Wymaga danych runtime.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak profilowania i analizy wydajności.",
+      "limitations": "Wymaga danych runtime.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.4.5",
+      "category": "Reporting",
+      "title": "API Orchestratora używa minimalnej liczby żądań",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "project.json"
+      ],
+      "patterns": [
+        "Framework_Raport|FrameworkRaport|Report"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy kodu/trace HTTP. Ograniczenie: Wymaga analizy API i runtime.",
+      "manualReason": "Wymaga analizy API i runtime.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy kodu/trace HTTP.",
+      "limitations": "Wymaga analizy API i runtime.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.5.1",
+      "category": "Configuration",
+      "title": "Config.xlsx ma arkusze DEV i PRD",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Dodać Excel reader albo manual. Zakres automatyczny: Silnik nie czyta zawartości XLSX. Ograniczenie: Obecność pliku nie wystarcza.",
+      "manualReason": "Obecność pliku nie wystarcza.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Silnik nie czyta zawartości XLSX.",
+      "limitations": "Obecność pliku nie wystarcza.",
+      "recommendedAction": "Dodać Excel reader albo manual."
+    },
+    {
+      "id": "4.5.2",
+      "category": "Configuration",
+      "title": "Nazwy kolejek są w kodzie, nie Config",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak porównania workbooka z workflowami. Ograniczenie: Wymaga Excel/XAML cross-check.",
+      "manualReason": "Wymaga Excel/XAML cross-check.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak porównania workbooka z workflowami.",
+      "limitations": "Wymaga Excel/XAML cross-check.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.5.3",
+      "category": "Configuration",
+      "title": "Config nie ma zbędnych parametrów",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny użycia każdego parametru. Ograniczenie: Wymaga grafu odczytów.",
+      "manualReason": "Wymaga grafu odczytów.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny użycia każdego parametru.",
+      "limitations": "Wymaga grafu odczytów.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.5.4",
+      "category": "Configuration",
+      "title": "logF_BusinessProcessName zawiera nazwę artefaktu",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Można wykrywać BusinessProcessName/artefakt. Ograniczenie: Nie jest czytany Config.xlsx.",
+      "manualReason": "Nie jest czytany Config.xlsx.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykrywać BusinessProcessName/artefakt.",
+      "limitations": "Nie jest czytany Config.xlsx.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.5.5",
+      "category": "Configuration",
+      "title": "Asset Environment jest pobierany z Orchestratora",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Wykrywane są Environment/Get Asset/Orchestrator. Ograniczenie: Nie jest potwierdzone poprawne pobranie assetu.",
+      "manualReason": "Nie jest potwierdzone poprawne pobranie assetu.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są Environment/Get Asset/Orchestrator.",
+      "limitations": "Nie jest potwierdzone poprawne pobranie assetu.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "4.6.1",
+      "category": "Files",
+      "title": "Input-data-TST ma lustrzaną strukturę",
+      "severity": "Medium",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "Input-data-TST"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywany jest katalog Input-data-TST. Ograniczenie: Nie jest porównywana struktura z produkcją.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywany jest katalog Input-data-TST.",
+      "limitations": "Nie jest porównywana struktura z produkcją.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.6.2",
+      "category": "Files",
+      "title": "Duże pliki trafiają na zasób biznesowy",
+      "severity": "Medium",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "Input-data-TST"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak wolumenów biznesowych i zasobów. Ograniczenie: Wymaga kontekstu.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak wolumenów biznesowych i zasobów.",
+      "limitations": "Wymaga kontekstu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.6.3",
+      "category": "Files",
+      "title": "Pliki tymczasowe są usuwane przed i po pracy",
+      "severity": "Medium",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "Input-data-TST"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są Delete/File.Delete/temp. Ograniczenie: Nie jest sprawdzana kolejność przed/po.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są Delete/File.Delete/temp.",
+      "limitations": "Nie jest sprawdzana kolejność przed/po.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.6.4",
+      "category": "Files",
+      "title": "Storage Buckets są używane, gdy zalecane",
+      "severity": "Medium",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "Input-data-TST"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak dostępu do Storage Buckets. Ograniczenie: Wymaga Orchestratora.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak dostępu do Storage Buckets.",
+      "limitations": "Wymaga Orchestratora.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.7.1",
+      "category": "Exceptions",
+      "title": "Screenshoty są w katalogu artefaktu",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "ExceptionScreenshots"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Partial. Zakres automatyczny: Wykrywany jest katalog i tekst ExceptionScreenshots. Ograniczenie: Nie jest potwierdzane powiązanie z artefaktem.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywany jest katalog i tekst ExceptionScreenshots.",
+      "limitations": "Nie jest potwierdzane powiązanie z artefaktem.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.7.2",
+      "category": "Exceptions",
+      "title": "Screenshot pokazuje moment błędu",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "ExceptionScreenshots"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy obrazu i przebiegu błędu. Ograniczenie: Wymaga runtime/manual.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy obrazu i przebiegu błędu.",
+      "limitations": "Wymaga runtime/manual.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.7.3",
+      "category": "Exceptions",
+      "title": "Kolejkowanie i przetwarzanie mogą mieć osobne katalogi",
+      "severity": "High",
+      "checkType": "DirectoryExists",
+      "filePatterns": [
+        "ExceptionScreenshots"
+      ],
+      "patterns": [],
+      "required": true,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny architektury katalogów. Ograniczenie: Wymaga kontekstu.",
+      "manualReason": "",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny architektury katalogów.",
+      "limitations": "Wymaga kontekstu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.8.1",
+      "category": "Mail",
+      "title": "Mail jest używany tylko gdy procesowo wymagany",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak oceny wymogu biznesowego. Ograniczenie: Wymaga instrukcji procesu.",
+      "manualReason": "Wymaga instrukcji procesu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak oceny wymogu biznesowego.",
+      "limitations": "Wymaga instrukcji procesu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "4.8.2",
+      "category": "Mail",
+      "title": "Mail zawiera automatyczną stopkę i prośbę o nieodpowiadanie",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Można szukać słów automatycznie/no reply. Ograniczenie: Brak parsera treści każdego maila.",
+      "manualReason": "Brak parsera treści każdego maila.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można szukać słów automatycznie/no reply.",
+      "limitations": "Brak parsera treści każdego maila.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.8.3",
+      "category": "Mail",
+      "title": "BOT używa właściwej skrzynki",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Można wykryć adresy w źródłach. Ograniczenie: Brak potwierdzenia konfiguracji konektora.",
+      "manualReason": "Brak potwierdzenia konfiguracji konektora.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć adresy w źródłach.",
+      "limitations": "Brak potwierdzenia konfiguracji konektora.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "4.9.1",
+      "category": "Web",
+      "title": "Przeglądarka działa w trybie prywatnym",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "private|incognito|Chrome|Edge|Enterprise"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są private/incognito. Ograniczenie: Brak pewnego parsera opcji browsera.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są private/incognito.",
+      "limitations": "Brak pewnego parsera opcji browsera.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.9.2",
+      "category": "Web",
+      "title": "Preferowany jest Chrome",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "private|incognito|Chrome|Edge|Enterprise"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywany jest tekst Chrome. Ograniczenie: Nie jest oceniana preferencja względem wymagań.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywany jest tekst Chrome.",
+      "limitations": "Nie jest oceniana preferencja względem wymagań.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "4.9.3",
+      "category": "Web",
+      "title": "IE używa Edge Enterprise Mode",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "private|incognito|Chrome|Edge|Enterprise"
+      ],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Wykrywany jest Edge/Enterprise. Ograniczenie: Brak potwierdzenia konfiguracji trybu.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywany jest Edge/Enterprise.",
+      "limitations": "Brak potwierdzenia konfiguracji trybu.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "4.10",
+      "category": "Files",
+      "title": "Pliki tymczasowe są czyszczone przed i po",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Możliwe jest wykrywanie operacji cleanup. Ograniczenie: Nie jest potwierdzona kolejność.",
+      "manualReason": "Nie jest potwierdzona kolejność.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Możliwe jest wykrywanie operacji cleanup.",
+      "limitations": "Nie jest potwierdzona kolejność.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "AUMS.1",
+      "category": "AUMS",
+      "title": "AUMS zamyka wszystkie okna po Application Exception",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.md"
+      ],
+      "patterns": [
+        "ZamykarkaAUMS|AUMS"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak wykonania i mapy zamykania okien. Ograniczenie: Wymaga AUMS runtime/Common.",
+      "manualReason": "Wymaga AUMS runtime/Common.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak wykonania i mapy zamykania okien.",
+      "limitations": "Wymaga AUMS runtime/Common.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "AUMS.2",
+      "category": "AUMS",
+      "title": "AUMS zapisuje szczegóły błędu w ExceptionScreenshots",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.json"
+      ],
+      "patterns": [
+        "text attribute|TextAttribute|ScrapingMethod|scraping method"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są AUMS i ExceptionScreenshots. Ograniczenie: Brak powiązania błędu z zapisem.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są AUMS i ExceptionScreenshots.",
+      "limitations": "Brak powiązania błędu z zapisem.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "AUMS.3",
+      "category": "AUMS",
+      "title": "AUMS korzysta z Common/ZamykarkaAUMS",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.md"
+      ],
+      "patterns": [
+        "Find Children|FindChildren"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Można wykryć Common/AUMS/ZamykarkaAUMS. Ograniczenie: Nie jest sprawdzane faktyczne wywołanie.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć Common/AUMS/ZamykarkaAUMS.",
+      "limitations": "Nie jest sprawdzane faktyczne wywołanie.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "AUMS.4",
+      "category": "AUMS",
+      "title": "BOT obsługuje wiele kont robotów",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [
+        "*.xaml",
+        "*.json"
+      ],
+      "patterns": [
+        "aastate|unavailable|invisible"
+      ],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak konfiguracji kont. Ograniczenie: Wymaga Orchestratora.",
+      "manualReason": "Wymaga Orchestratora.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak konfiguracji kont.",
+      "limitations": "Wymaga Orchestratora.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "AUMS.5",
+      "category": "AUMS",
+      "title": "Wiele instancji AUMS ma uzasadnienie i zgodę",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak formalnej zgody. Ograniczenie: Wymaga dokumentu architektonicznego.",
+      "manualReason": "Wymaga dokumentu architektonicznego.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak formalnej zgody.",
+      "limitations": "Wymaga dokumentu architektonicznego.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "AUMS.6",
+      "category": "AUMS",
+      "title": "Get Text ma Scraping method=text attribute",
+      "severity": "High",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane są text attribute/ScrapingMethod. Ograniczenie: Brak XML property validation per activity.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są text attribute/ScrapingMethod.",
+      "limitations": "Brak XML property validation per activity.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "AUMS.7",
+      "category": "AUMS",
+      "title": "Find Children jest używane dla danych strukturalnych",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Wykrywane jest Find Children. Ograniczenie: Brak oceny, czy powinno być użyte w każdym przypadku.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane jest Find Children.",
+      "limitations": "Brak oceny, czy powinno być użyte w każdym przypadku.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "AUMS.8",
+      "category": "AUMS",
+      "title": "Use Application ma Single window",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak parsera właściwości Use Application. Ograniczenie: Wymaga property-level XAML analysis.",
+      "manualReason": "Wymaga property-level XAML analysis.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak parsera właściwości Use Application.",
+      "limitations": "Wymaga property-level XAML analysis.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "AUMS.9",
+      "category": "AUMS",
+      "title": "Selector ma regex aastate wykluczający unavailable/invisible",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Można wykryć aastate/unavailable/invisible. Ograniczenie: Brak walidacji kompletnego selector expression.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć aastate/unavailable/invisible.",
+      "limitations": "Brak walidacji kompletnego selector expression.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "SOD.1",
+      "category": "SOD",
+      "title": "SOD 5.5 obsługuje API i zatwierdzony FrameworkAPI_SOD55",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "*.xaml",
+        "*.cs",
+        "*.json",
+        "*.md"
+      ],
+      "patterns": [
+        "SOD|API_SOD|FrameworkAPI"
+      ],
+      "required": false,
+      "guidance": "Partial/manual. Zakres automatyczny: Wykrywane są SOD/API_SOD/FrameworkAPI. Ograniczenie: Nie jest sprawdzana kompletność implementacji API.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Wykrywane są SOD/API_SOD/FrameworkAPI.",
+      "limitations": "Nie jest sprawdzana kompletność implementacji API.",
+      "recommendedAction": "Partial/manual."
+    },
+    {
+      "id": "ADO.1",
+      "category": "ADO",
+      "title": "ADO login obsługuje zmianę hasła, wiele instancji i brak logowania",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak analizy runtime logowania. Ograniczenie: Wymaga aplikacji ADO i testów.",
+      "manualReason": "Wymaga aplikacji ADO i testów.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak analizy runtime logowania.",
+      "limitations": "Wymaga aplikacji ADO i testów.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "ADO.2",
+      "category": "ADO",
+      "title": "ADO zamyka okna bez zablokowania sprawy",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak mapy zamykania i testu. Ograniczenie: Wymaga runtime.",
+      "manualReason": "Wymaga runtime.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak mapy zamykania i testu.",
+      "limitations": "Wymaga runtime.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "PROC.1",
+      "category": "Procedures",
+      "title": "Deweloper pracuje na dedykowanym koncie AD",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak informacji o koncie w projekcie. Ograniczenie: Wymaga procedur organizacyjnych.",
+      "manualReason": "Wymaga procedur organizacyjnych.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak informacji o koncie w projekcie.",
+      "limitations": "Wymaga procedur organizacyjnych.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "PROC.2",
+      "category": "Procedures",
+      "title": "Dostęp produkcyjny ma zgodę Biznesu i go/no-go",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak maili/zgód w źródłach. Ograniczenie: Nie wolno automatycznie oceniać poza repozytorium.",
+      "manualReason": "Nie wolno automatycznie oceniać poza repozytorium.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak maili/zgód w źródłach.",
+      "limitations": "Nie wolno automatycznie oceniać poza repozytorium.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "PROC.3",
+      "category": "Procedures",
+      "title": "Dostępy są przekazywane rozdzielonymi kanałami",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak procesu dystrybucji poświadczeń. Ograniczenie: Wymaga procedury bezpieczeństwa.",
+      "manualReason": "Wymaga procedury bezpieczeństwa.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak procesu dystrybucji poświadczeń.",
+      "limitations": "Wymaga procedury bezpieczeństwa.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "PROC.4",
+      "category": "Procedures",
+      "title": "Po zakończeniu DEV czyszczone są kolejki, Storage, temp i test input",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Można wykryć lokalny cleanup, nie zasoby zewnętrzne. Ograniczenie: Wymaga Orchestratora i potwierdzenia procesu.",
+      "manualReason": "Wymaga Orchestratora i potwierdzenia procesu.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Można wykryć lokalny cleanup, nie zasoby zewnętrzne.",
+      "limitations": "Wymaga Orchestratora i potwierdzenia procesu.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "RPA-TV.1",
+      "category": "RPA-TV",
+      "title": "README opisuje kolejki, assety i default values",
+      "severity": "Medium",
+      "checkType": "AnyFile",
+      "filePatterns": [
+        "README.md",
+        "*.md"
+      ],
+      "patterns": [
+        "queue|kolejk|asset|default|unique"
+      ],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: README i słowa queue/asset/default mogą być znalezione. Ograniczenie: Nie jest sprawdzana kompletność informacji.",
+      "manualReason": "",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "README i słowa queue/asset/default mogą być znalezione.",
+      "limitations": "Nie jest sprawdzana kompletność informacji.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "RPA-TV.2",
+      "category": "RPA-TV",
+      "title": "Dokumentacja nie ma komentarzy, DDP jest podpisane",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak kontroli podpisu DDP i komentarzy dokumentacji. Ograniczenie: Wymaga dokumentów.",
+      "manualReason": "Wymaga dokumentów.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak kontroli podpisu DDP i komentarzy dokumentacji.",
+      "limitations": "Wymaga dokumentów.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "RPA-TV.3",
+      "category": "RPA-TV",
+      "title": "Szablony Issue są w kodzie",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Partial. Zakres automatyczny: Można wykryć Issue/Template. Ograniczenie: Brak weryfikacji kompletności wzorów.",
+      "manualReason": "Brak weryfikacji kompletności wzorów.",
+      "implementationStatus": "Częściowa",
+      "evidenceScope": "Można wykryć Issue/Template.",
+      "limitations": "Brak weryfikacji kompletności wzorów.",
+      "recommendedAction": "Partial."
+    },
+    {
+      "id": "RPA-TV.4",
+      "category": "RPA-TV",
+      "title": "Są trzy scenariusze: Success, BRE, Appex i poprawne zamknięcie okien",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak uruchamiania scenariuszy w ramach kontroli. Ograniczenie: Wymaga testów Unattended.",
+      "manualReason": "Wymaga testów Unattended.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak uruchamiania scenariuszy w ramach kontroli.",
+      "limitations": "Wymaga testów Unattended.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "RPA-TV.5",
+      "category": "RPA-TV",
+      "title": "BOT uruchamia się Unattended",
+      "severity": "High",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak konfiguracji robota i wykonania joba. Ograniczenie: Wymaga Orchestratora.",
+      "manualReason": "Wymaga Orchestratora.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak konfiguracji robota i wykonania joba.",
+      "limitations": "Wymaga Orchestratora.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "ORCH.1",
+      "category": "Orchestrator",
+      "title": "Developer ma właściwy folder i uprawnienia",
+      "severity": "Critical",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak dostępu do uprawnień w katalogu review. Ograniczenie: Wymaga Orchestratora.",
+      "manualReason": "Wymaga Orchestratora.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak dostępu do uprawnień w katalogu review.",
+      "limitations": "Wymaga Orchestratora.",
+      "recommendedAction": "Manual."
+    },
+    {
+      "id": "ORCH.2",
+      "category": "Orchestrator",
+      "title": "Elementy są zlinkowane z Default folderem",
+      "severity": "Medium",
+      "checkType": "Manual",
+      "filePatterns": [],
+      "patterns": [],
+      "required": false,
+      "guidance": "Manual. Zakres automatyczny: Brak mapowania zasobów folderowych. Ograniczenie: Wymaga Orchestratora.",
+      "manualReason": "Wymaga Orchestratora.",
+      "implementationStatus": "Brak / do weryfikacji ręcznej",
+      "evidenceScope": "Brak mapowania zasobów folderowych.",
+      "limitations": "Wymaga Orchestratora.",
+      "recommendedAction": "Manual."
+    }
   ]
 }

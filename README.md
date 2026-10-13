@@ -44,11 +44,33 @@ uip rpa run "C:\\Users\\bdziedzi\\Documents\\UiPath\\RpaCodeReview" --entry-poin
 
 Reguły można rozszerzać w `Rules.json` bez modyfikowania kodu. Dla kontroli zależnych od kontekstu biznesowego należy użyć `checkType: "Manual"` i opisać `manualReason`.
 
+### Status implementacji reguły
+
+Katalog zawiera także metadane oceny pokrycia implementacyjnego. Nie są one tym samym co runtime'owy status `Pass`, `Fail` albo `Warning`:
+
+- `Pełna` — wszystkie wymagania atomowej reguły mogą być sprawdzone lokalnie i deterministycznie;
+- `Częściowa` — analizator potwierdza tylko część wymagania, a pozostała część wymaga kontekstu lub ręcznej oceny;
+- `Brak / do weryfikacji ręcznej` — reguła zależy głównie od Orchestratora, Git, runtime, dokumentów biznesowych albo decyzji architektonicznej.
+
+Pola `evidenceScope`, `limitations` i `recommendedAction` opisują odpowiednio zakres dowodu, ograniczenie kontroli i następny krok. `1.1.2` jest regułą grupującą i nie zastępuje atomowych kontroli `1.1.2.1`–`1.1.2.5`. Kontrola `1.1.2.4` pozostaje ostrzeżeniem do oceny słownika domenowego; nie próbuje automatycznie rozstrzygać, czy skrót jest łatwy do skojarzenia.
+
+### Jawne typy kontroli
+
+- `RuleGroup` — informacyjna grupa nadrzędna; szczegółowy wynik pochodzi z podreguł.
+- `VariableNotation` — sprawdza rozpoznane deklaracje pod kątem PascalCase, camelCase lub snake_case; nie ocenia znaczenia nazwy.
+- `ForbiddenNameToken` — wykrywa samodzielny człon `i`, a nie każdą literę `i` w wyrazie.
+- `TypedVariablePrefix` — wiąże rozpoznany typ `DataTable` z prefiksem `dt`.
+- `AbbreviationReview` — zawsze zwraca `Warning`, ponieważ skojarzenie skrótu wymaga kontekstu domenowego.
+- `GlobalVariablePrefix` — sprawdza prefiks `g_`/`global_` tylko dla rozpoznanego scope globalnego; brak rozpoznanego scope nie jest udawany jako `Pass`.
+- `ArgumentNaming` — sprawdza deklaracje argumentów w obsługiwanych postaciach XAML i C# pod kątem `in_`, `out_` oraz `io_`.
+
+Kontrole parserowe mogą zwrócić `Warning`, gdy nie znaleziono materiału wejściowego albo nie da się jednoznacznie rozpoznać konstrukcji. To celowe zachowanie: brak dowodu nie jest równoznaczny z potwierdzeniem zgodności.
+
 
 ## Najważniejsze artefakty:
 
 RpaCodeReviewWorkflow.cs — główny workflow z argumentem ProjectPath.
-Rules.json — konfigurowalny katalog 56 reguł.
+Rules.json — konfigurowalny katalog 143 atomowych reguł i podreguł.
 LocalProjectReviewEngine.cs — lokalna analiza XAML, C#, JSON, manifestów i plików projektu.
 LocalXlsxReportWriter.cs — generator raportu XLSX.
 ReviewModels.cs — modele reguł, dowodów i wyników.
