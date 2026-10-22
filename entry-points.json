@@ -1,0 +1,64 @@
+{
+  "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+  "entryPoints": [
+    {
+      "filePath": "Main.xaml",
+      "uniqueId": "9ce0e4b4-8d8f-4c08-9f28-b17c73fec188",
+      "type": "process"
+    },
+    {
+      "filePath": "RpaCodeReviewWorkflow.cs",
+      "uniqueId": "b2d3e7b5-5c15-4cf6-9d2d-0dbf9aa70b2a",
+      "type": "process",
+      "input": {
+        "type": "object",
+        "properties": {
+          "ProjectPath": {
+            "type": "string"
+          },
+          "RulesPath": {
+            "type": "string",
+            "x-default-expression": "\"\"",
+            "default": ""
+          },
+          "OutputReportPath": {
+            "type": "string",
+            "x-default-expression": "\"\"",
+            "default": ""
+          },
+          "IncludeHiddenFiles": {
+            "type": "boolean",
+            "x-default-expression": "false",
+            "default": false
+          },
+          "FailOnMissingRequiredArtifact": {
+            "type": "boolean",
+            "x-default-expression": "false",
+            "default": false
+          },
+          "RuleFilter": {
+            "type": "string",
+            "x-default-expression": "\"\"",
+            "default": ""
+          }
+        },
+        "required": [
+          "ProjectPath",
+          "RulesPath",
+          "OutputReportPath",
+          "IncludeHiddenFiles",
+          "FailOnMissingRequiredArtifact",
+          "RuleFilter"
+        ]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "Output": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}

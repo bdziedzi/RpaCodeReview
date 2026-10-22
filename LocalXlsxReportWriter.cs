@@ -42,20 +42,21 @@ namespace RpaCodeReview
             new [] { "Pass", s.PassCount.ToString(), "", "" },
             new [] { "Fail", s.FailCount.ToString(), "", "" },
             new [] { "Warning", s.WarningCount.ToString(), "", "" },
+            new [] { "Manual", s.ManualCount.ToString(), "", "" },
             new [] { "Privacy", "Analysis is local and deterministic. No AI or external service is called.", "", "" }
         };
 
         private static List<string[]> ResultRows(ReviewRunSummary s)
         {
-            var rows = new List<string[]> { new [] { "RuleId", "Category", "Title", "Severity", "Status", "Reason", "Recommendation" } };
-            rows.AddRange(s.Results.Select(r => new [] { r.RuleId, r.Category, r.Title, r.Severity, r.Status, r.Reason, r.Recommendation }));
+            var rows = new List<string[]> { new [] { "RuleId", "GuidelineChapter", "Category", "Title", "Severity", "Status", "Reason", "Recommendation" } };
+            rows.AddRange(s.Results.Select(r => new [] { r.RuleId, r.GuidelineChapter, r.Category, r.Title, r.Severity, r.Status, r.Reason, r.Recommendation }));
             return rows;
         }
 
         private static List<string[]> EvidenceRows(ReviewRunSummary s)
         {
-            var rows = new List<string[]> { new [] { "RuleId", "Status", "RelativePath", "Location", "Quote", "Detail" } };
-            rows.AddRange(s.Results.SelectMany(r => r.Evidence.Select(e => new [] { r.RuleId, r.Status, e.RelativePath, e.Location, e.Quote, e.Detail })));
+            var rows = new List<string[]> { new [] { "RuleId", "GuidelineChapter", "Status", "RelativePath", "Location", "Quote", "Detail" } };
+            rows.AddRange(s.Results.SelectMany(r => r.Evidence.Select(e => new [] { r.RuleId, e.GuidelineChapter, e.Status, e.RelativePath, e.Location, e.Quote, e.Detail })));
             return rows;
         }
 

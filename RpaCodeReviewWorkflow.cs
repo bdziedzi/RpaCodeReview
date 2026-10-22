@@ -14,7 +14,7 @@ namespace RpaCodeReview
             Log("Starting local RPA code review for: " + ProjectPath);
             var summary = LocalProjectReviewEngine.Run(ProjectPath, rules, report, IncludeHiddenFiles, FailOnMissingRequiredArtifact, RuleFilter);
             LocalXlsxReportWriter.Write(summary, report);
-            Log("Review finished. Pass=" + summary.PassCount + ", Fail=" + summary.FailCount + ", Warning=" + summary.WarningCount);
+            Log("Review finished. Pass=" + summary.PassCount + ", Fail=" + summary.FailCount + ", Warning=" + summary.WarningCount + ", Manual=" + summary.ManualCount);
             Log("Report written locally to: " + summary.OutputReportPath);
             return summary.OutputReportPath;
         }

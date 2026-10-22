@@ -28,6 +28,7 @@ namespace RpaCodeReview
         public string evidenceScope { get; set; } = "";
         public string limitations { get; set; } = "";
         public string recommendedAction { get; set; } = "";
+        public string GuidelineChapter { get; set; } = "";
     }
 
     public sealed class ProjectFileEvidence
@@ -41,6 +42,7 @@ namespace RpaCodeReview
     public sealed class RuleEvidence
     {
         public string RuleId { get; set; } = "";
+        public string GuidelineChapter { get; set; } = "";
         public string Status { get; set; } = "Warning";
         public string RelativePath { get; set; } = "";
         public string Location { get; set; } = "";
@@ -51,6 +53,7 @@ namespace RpaCodeReview
     public sealed class RuleResult
     {
         public string RuleId { get; set; } = "";
+        public string GuidelineChapter { get; set; } = "";
         public string Category { get; set; } = "";
         public string Title { get; set; } = "";
         public string Severity { get; set; } = "";
@@ -79,6 +82,7 @@ namespace RpaCodeReview
         public int PassCount { get; set; }
         public int FailCount { get; set; }
         public int WarningCount { get; set; }
+        public int ManualCount { get; set; }
         public int RuleCount { get; set; }
         public List<RuleResult> Results { get; set; } = new List<RuleResult>();
         public List<InventoryItem> Inventory { get; set; } = new List<InventoryItem>();

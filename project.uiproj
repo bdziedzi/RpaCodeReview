@@ -1,0 +1,6 @@
+{
+  "Name": "RpaCodeReview",
+  "ProjectType": "Process",
+  "Description": "Local deterministic UiPath RPA code review process",
+  "MainFile": "RpaCodeReviewWorkflow.cs"
+}

@@ -48,7 +48,9 @@ namespace RpaCodeReview
             foreach (var rule in catalog.rules ?? new List<RuleDefinition>())
             {
                 if (!string.IsNullOrWhiteSpace(ruleFilter) && !rule.id.Contains(ruleFilter, StringComparison.OrdinalIgnoreCase) && !rule.category.Contains(ruleFilter, StringComparison.OrdinalIgnoreCase)) continue;
-                results.Add(Evaluate(rule, projectPath, files, failOnMissingRequiredArtifact));
+                var evaluated = Evaluate(rule, projectPath, files, failOnMissingRequiredArtifact);
+                ApplyCoverageStatus(evaluated, rule);
+                results.Add(evaluated);
             }
 
             return new ReviewRunSummary
@@ -63,6 +65,7 @@ namespace RpaCodeReview
                 PassCount = results.Count(r => r.Status == "Pass"),
                 FailCount = results.Count(r => r.Status == "Fail"),
                 WarningCount = results.Count(r => r.Status == "Warning"),
+                ManualCount = results.Count(r => r.Status == "Manual"),
                 Inventory = files.Select(f => new InventoryItem
                 {
                     RelativePath = f.RelativePath,
@@ -100,16 +103,16 @@ namespace RpaCodeReview
 
         private static RuleResult Evaluate(RuleDefinition rule, string root, List<ProjectFileEvidence> files, bool failOnMissingRequiredArtifact)
         {
-            var result = new RuleResult { RuleId = rule.id, Category = rule.category, Title = rule.title, Severity = rule.severity, Recommendation = rule.guidance };
+            var result = new RuleResult { RuleId = rule.id, GuidelineChapter = GuidelineChapter(rule), Category = rule.category, Title = rule.title, Severity = rule.severity, Recommendation = rule.guidance };
             if (string.Equals(rule.checkType, "Manual", StringComparison.OrdinalIgnoreCase))
             {
                 return ManualResult(rule, result, string.IsNullOrWhiteSpace(rule.manualReason) ? "Wymaga ręcznej weryfikacji." : rule.manualReason);
             }
             if (string.Equals(rule.checkType, "RuleGroup", StringComparison.OrdinalIgnoreCase))
             {
-                result.Status = "Warning";
-                result.Reason = "Reguła grupująca; wynik należy odczytywać z atomowych podreguł tej grupy.";
-                result.Evidence.Add(new RuleEvidence { RuleId = rule.id, Status = "Warning", Location = "rule catalog", Detail = result.Reason });
+                result.Status = "Manual";
+                result.Reason = "Reguła grupująca nie jest samodzielnie sprawdzana; należy ocenić podreguły atomowe.";
+                result.Evidence.Add(new RuleEvidence { RuleId = rule.id, GuidelineChapter = result.GuidelineChapter, Status = "Manual", Location = "rule catalog", Detail = result.Reason });
                 return result;
             }
 
@@ -197,7 +200,7 @@ namespace RpaCodeReview
 
         private static RuleResult EvaluateVariableNamingRule(RuleDefinition rule, List<ProjectFileEvidence> candidates, bool failOnMissingRequiredArtifact)
         {
-            var result = new RuleResult { RuleId = rule.id, Category = rule.category, Title = rule.title, Severity = rule.severity, Recommendation = rule.guidance };
+            var result = new RuleResult { RuleId = rule.id, GuidelineChapter = GuidelineChapter(rule), Category = rule.category, Title = rule.title, Severity = rule.severity, Recommendation = rule.guidance };
             var declarations = ExtractVariableDeclarations(candidates);
             if (string.Equals(rule.checkType, "AbbreviationReview", StringComparison.OrdinalIgnoreCase))
             {
@@ -255,7 +258,7 @@ namespace RpaCodeReview
 
         private static RuleResult EvaluateArgumentNamingRule(RuleDefinition rule, List<ProjectFileEvidence> candidates, bool failOnMissingRequiredArtifact)
         {
-            var result = new RuleResult { RuleId = rule.id, Category = rule.category, Title = rule.title, Severity = rule.severity, Recommendation = rule.guidance };
+            var result = new RuleResult { RuleId = rule.id, GuidelineChapter = GuidelineChapter(rule), Category = rule.category, Title = rule.title, Severity = rule.severity, Recommendation = rule.guidance };
             var arguments = ExtractArgumentDeclarations(candidates);
             if (arguments.Count == 0)
             {
@@ -363,10 +366,42 @@ namespace RpaCodeReview
 
         private static RuleResult ManualResult(RuleDefinition rule, RuleResult result, string reason)
         {
-            result.Status = "Warning";
+            result.Status = "Manual";
             result.Reason = reason;
-            result.Evidence.Add(new RuleEvidence { RuleId = rule.id, Status = "Warning", Location = "manual review", Detail = reason });
+            result.Evidence.Add(new RuleEvidence { RuleId = rule.id, GuidelineChapter = result.GuidelineChapter, Status = "Manual", Location = "manual review", Detail = reason });
             return result;
+        }
+
+        private static void ApplyCoverageStatus(RuleResult result, RuleDefinition rule)
+        {
+            result.GuidelineChapter = GuidelineChapter(rule);
+            var manual = string.Equals(rule.checkType, "Manual", StringComparison.OrdinalIgnoreCase) ||
+                         string.Equals(rule.checkType, "RuleGroup", StringComparison.OrdinalIgnoreCase);
+            var partial = (rule.implementationStatus ?? "").IndexOf("Częściowa", StringComparison.OrdinalIgnoreCase) >= 0;
+            if (manual) result.Status = "Manual";
+            else if (partial && string.Equals(result.Status, "Pass", StringComparison.OrdinalIgnoreCase))
+            {
+                result.Status = "Warning";
+                result.Reason = result.Reason + " Pokrycie implementacyjne jest częściowe.";
+            }
+            foreach (var evidence in result.Evidence)
+            {
+                evidence.RuleId = rule.id;
+                evidence.GuidelineChapter = result.GuidelineChapter;
+                evidence.Status = result.Status;
+            }
+            if (result.Evidence.Count == 0)
+                result.Evidence.Add(new RuleEvidence { RuleId = rule.id, GuidelineChapter = result.GuidelineChapter, Status = result.Status, Detail = result.Reason });
+        }
+
+        private static string GuidelineChapter(RuleDefinition rule)
+        {
+            if (!string.IsNullOrWhiteSpace(rule.GuidelineChapter)) return rule.GuidelineChapter;
+            var id = rule.id ?? "";
+            var parts = id.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var chapter = parts.Length >= 3 && int.TryParse(parts[0], out _) ? string.Join(".", parts.Take(3)) : (parts.Length > 0 ? parts[0] : id);
+            if (parts.Length == 2 && int.TryParse(parts[0], out _)) chapter = id;
+            return "Wytyczna realizacyjna " + chapter;
         }
 
         private static List<ProjectFileEvidence> SelectFiles(RuleDefinition rule, List<ProjectFileEvidence> files)
@@ -384,11 +419,11 @@ namespace RpaCodeReview
 
         private static RuleEvidence CreateEvidence(RuleDefinition rule, ProjectFileEvidence file, string quote, string detail, int index = 0)
         {
-            if (file == null) return new RuleEvidence { RuleId = rule.id, Status = "Warning", Detail = detail };
+            if (file == null) return new RuleEvidence { RuleId = rule.id, GuidelineChapter = GuidelineChapter(rule), Status = "Warning", Detail = detail };
             var line = Math.Max(1, file.Content.Take(Math.Min(index, file.Content.Length)).Count(c => c == '\n') + 1);
             var lineText = file.Lines.Length >= line ? file.Lines[line - 1].Trim() : quote;
             if (lineText.Length > 240) lineText = lineText.Substring(0, 237) + "...";
-            return new RuleEvidence { RuleId = rule.id, Status = "", RelativePath = file.RelativePath, Location = "line " + line, Quote = lineText, Detail = detail };
+            return new RuleEvidence { RuleId = rule.id, GuidelineChapter = GuidelineChapter(rule), Status = "Warning", RelativePath = file.RelativePath, Location = "line " + line, Quote = lineText, Detail = detail };
         }
 
         private static string GetKind(string path)
